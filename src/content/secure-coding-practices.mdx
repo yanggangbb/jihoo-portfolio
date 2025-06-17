@@ -1,0 +1,69 @@
+---
+title: "안전한 코딩 사례"
+date: "2024-01-20"
+excerpt: "웹 개발에서 흔히 발생하는 보안 취약점과 이를 예방하기 위한 코딩 방법을 소개합니다."
+category: "개발"
+imageUrl: "/placeholder.svg?height=600&width=1200"
+---
+
+# 안전한 코딩 사례
+
+웹 개발에서 보안은 선택이 아닌 필수입니다. 이 글에서는 웹 개발에서 흔히 발생하는 보안 취약점과 이를 예방하기 위한 코딩 방법을 소개합니다.
+
+## 주요 웹 취약점
+
+### 1. SQL 인젝션
+
+사용자 입력을 적절히 검증하지 않아 발생하는 취약점입니다.
+
+**취약한 코드:**
+\`\`\`javascript
+const query = "SELECT * FROM users WHERE username = '" + username + "'";
+\`\`\`
+
+**안전한 코드:**
+\`\`\`javascript
+const query = "SELECT * FROM users WHERE username = ?";
+db.execute(query, [username]);
+\`\`\`
+
+### 2. XSS(Cross-Site Scripting)
+
+사용자 입력이 그대로 웹 페이지에 출력될 때 발생하는 취약점입니다.
+
+**취약한 코드:**
+\`\`\`javascript
+document.getElementById("output").innerHTML = userInput;
+\`\`\`
+
+**안전한 코드:**
+\`\`\`javascript
+import { sanitizeHtml } from 'sanitize-html';
+document.getElementById("output").textContent = sanitizeHtml(userInput);
+\`\`\`
+
+### 3. CSRF(Cross-Site Request Forgery)
+
+사용자가 의도하지 않은 요청을 서버에 보내도록 하는 취약점입니다.
+
+**안전한 방법:**
+- CSRF 토큰 사용
+- SameSite 쿠키 속성 설정
+- Referer 검증
+
+## 보안 체크리스트
+
+1. **입력 검증**: 모든 사용자 입력은 서버 측에서 검증
+2. **출력 인코딩**: 사용자 입력을 출력할 때 적절한 인코딩 적용
+3. **인증과 권한 부여**: 적절한 인증 및 권한 검사 구현
+4. **안전한 세션 관리**: 세션 ID 보호, 타임아웃 설정
+5. **HTTPS 사용**: 모든 통신은 HTTPS로 암호화
+6. **보안 헤더 설정**: Content-Security-Policy, X-XSS-Protection 등
+7. **의존성 관리**: 사용하는 라이브러리의 보안 취약점 정기적 점검
+
+## 결론
+
+안전한 코딩은 개발 과정에서 지속적으로 고려해야 할 사항입니다. 보안을 나중에 추가하는 것이 아니라, 처음부터 설계에 포함시키는 것이 중요합니다.
+\`\`\`
+
+마지막으로 MDX 파일을 렌더링하는 페이지 컴포넌트도 수정하겠습니다:

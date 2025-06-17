@@ -16,9 +16,9 @@ export default function Home() {
   const projectSlugs = [
     "0day-analysis",
     "1day-analysis",
-    "security-dashboard",
-    "vulnerability-scanner-app",
-    "encrypted-messaging",
+    "ai-room-bot",
+    "secure-coding-market",
+    "dlab",
   ]
   const blogSlugs = ["introduction-to-vulnerability-research", "secure-coding-practices"]
 
@@ -86,13 +86,9 @@ export default function Home() {
           </FadeInSection>
           <FadeInSection delay={0.4}>
             <div className="mt-8 flex items-center justify-center gap-6">
-              <Link href="https://github.com" className="text-zinc-400 transition-colors hover:text-white">
+              <Link href="https://github.com/yanggangbb" className="text-zinc-400 transition-colors hover:text-white">
                 <Github className="h-6 w-6" />
                 <span className="sr-only">GitHub</span>
-              </Link>
-              <Link href="https://linkedin.com" className="text-zinc-400 transition-colors hover:text-white">
-                <Linkedin className="h-6 w-6" />
-                <span className="sr-only">LinkedIn</span>
               </Link>
               <Link href="mailto:yanggang0424@gmail.com" className="text-zinc-400 transition-colors hover:text-white">
                 <Mail className="h-6 w-6" />
@@ -195,7 +191,7 @@ export default function Home() {
                     <div>
                       <p className="text-sm text-zinc-400">Website</p>
                       <a
-                        href="https://yanggang-blog.vercel.app/"
+                        href="https://jihoo-portfolio.vercel.app/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="font-medium text-white hover:text-cyan-400"
