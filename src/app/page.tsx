@@ -15,7 +15,7 @@ export default function Home() {
   // Define slugs for projects and blog posts to categorize them
   const projectSlugs = [
     "bmp-parse-exploit",
-    "1day-analysis",
+    "open-cpn-0day-analysis",
     "ai-room-bot",
     "secure-coding-market",
     "dlab",
