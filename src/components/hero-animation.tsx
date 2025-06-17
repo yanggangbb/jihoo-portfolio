@@ -124,5 +124,5 @@ export function HeroAnimation() {
     }
   }, [])
 
-  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-70" />
+  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-50" />
 }
