@@ -20,7 +20,7 @@ export default function Home() {
     "secure-coding-market",
     "dlab",
   ]
-  const blogSlugs = ["introduction-to-vulnerability-research", "secure-coding-practices"]
+  const blogSlugs = ["2024-codegate-open-ctf-write-up", "secure-coding-practices"]
 
   const securityProjects = allPosts.filter((post) => post.category === "보안" && projectSlugs.includes(post.slug))
   const webAppProjects = allPosts.filter((post) => post.category === "개발" && projectSlugs.includes(post.slug))

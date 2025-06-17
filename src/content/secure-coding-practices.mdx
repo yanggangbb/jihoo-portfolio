@@ -17,30 +17,30 @@ imageUrl: "/placeholder.svg?height=600&width=1200"
 사용자 입력을 적절히 검증하지 않아 발생하는 취약점입니다.
 
 **취약한 코드:**
-\`\`\`javascript
+```javascript
 const query = "SELECT * FROM users WHERE username = '" + username + "'";
-\`\`\`
+```
 
 **안전한 코드:**
-\`\`\`javascript
+```javascript
 const query = "SELECT * FROM users WHERE username = ?";
 db.execute(query, [username]);
-\`\`\`
+```
 
 ### 2. XSS(Cross-Site Scripting)
 
 사용자 입력이 그대로 웹 페이지에 출력될 때 발생하는 취약점입니다.
 
 **취약한 코드:**
-\`\`\`javascript
+```javascript
 document.getElementById("output").innerHTML = userInput;
-\`\`\`
+```
 
 **안전한 코드:**
-\`\`\`javascript
+```javascript
 import { sanitizeHtml } from 'sanitize-html';
 document.getElementById("output").textContent = sanitizeHtml(userInput);
-\`\`\`
+```
 
 ### 3. CSRF(Cross-Site Request Forgery)
 
@@ -64,6 +64,4 @@ document.getElementById("output").textContent = sanitizeHtml(userInput);
 ## 결론
 
 안전한 코딩은 개발 과정에서 지속적으로 고려해야 할 사항입니다. 보안을 나중에 추가하는 것이 아니라, 처음부터 설계에 포함시키는 것이 중요합니다.
-\`\`\`
 
-마지막으로 MDX 파일을 렌더링하는 페이지 컴포넌트도 수정하겠습니다:
