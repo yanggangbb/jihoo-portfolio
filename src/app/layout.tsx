@@ -3,7 +3,7 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
-import ScrollToTopButton from "@/components/scroll-to-top-button" // 새로 추가된 컴포넌트 임포트
+import ScrollToTopButton from "@/components/scroll-to-top-button"
 
 const inter = Inter({ subsets: ["latin"] })
 

@@ -21,8 +21,8 @@ export function getPostBySlug(slug: string): { content: string; meta: PostMeta }
     }
 
     // 경로 보안 검증
-    if (slug.includes("..") || slug.includes("/") || slug.includes("\\")) {
-      throw new Error("Invalid slug format")
+    if (!/^[a-zA-Z0-9-_]+$/.test(slug)) {
+      throw new Error("Slug contains invalid characters")
     }
 
     const filePath = path.join(contentDirectory, `${slug}.mdx`)
