@@ -29,11 +29,11 @@ export default function PostPageClient({ content, meta }: PostPageClientProps) {
       .replace(/^(\d+)\. (.*$)/gim, '<li class="mb-2 text-zinc-300 ml-4">$1. $2</li>')
       .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-white">$1</strong>')
       .replace(/\*(.*?)\*/g, '<em class="italic text-zinc-200">$1</em>')
-      .replace(/`(.*?)`/g, '<code class="bg-zinc-800 text-cyan-400 px-2 py-1 rounded text-sm font-mono">$1</code>')
       .replace(/```[\s\S]*?```/g, (match) => {
         const codeContent = match.replace(/```\w*\n?/, "").replace(/```$/, "")
         return `<pre class="bg-zinc-900 border border-zinc-800 rounded-lg p-4 my-6 overflow-x-auto"><code class="text-zinc-300 text-sm font-mono leading-relaxed">${codeContent}</code></pre>`
       })
+      .replace(/`(.*?)`/g, '<code class="bg-zinc-800 text-cyan-400 px-2 py-1 rounded text-sm font-mono">$1</code>')
       .replace(/\n\n/g, '</p><p class="mb-4 text-zinc-300 leading-relaxed">')
       .replace(/^(?!<[h|l|p|c])(.*$)/gim, '<p class="mb-4 text-zinc-300 leading-relaxed">$1</p>')
   }
