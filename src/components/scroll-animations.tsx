@@ -118,5 +118,3 @@ export function ScaleInSection({ children, className, delay = 0 }: AnimatedSecti
     </motion.div>
   )
 }
-const AnimatedSection = FadeInSection
-export default AnimatedSection
