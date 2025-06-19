@@ -6,7 +6,6 @@ category: "보안"
 imageUrl: "/placeholder.svg?height=600&width=1200"
 ---
 
-<img src="/images/dlab.png" alt="풀이 예시" width="600"/>
 
 ## Shopping Mall(web)
 - 로그인 기능이 존재하고, 구매 목록이 하단에 뜨는 쇼핑몰 사이트
@@ -22,7 +21,7 @@ imageUrl: "/placeholder.svg?height=600&width=1200"
 
 - IDA로 분석, 바로 if문으로 입력값과 인증 키를 비교중(flag = 인증 키 값)
 
-```c
+```
 int __fastcall __noreturn main(int argc, const char **argv, const char **envp)
 {
   __int64 v3; // rax
@@ -57,7 +56,7 @@ int __fastcall __noreturn main(int argc, const char **argv, const char **envp)
 
 ## Gary the Snail(web)
 - command 인젝션 취약점이 존재하는 사이트(get요청으로 count값을 받는데 검증없이 command구문으로 삽입)
-- ?count=1; cat flag.txt를 입력해 보았으나 502.. 계속 시도해보니 ping -c {count} 8.8.8.8 형식으로 되어있어 echo같은 명령어가 아니면 구문 자체에 에러가 나는 것
+- ?count=1; cat flag.txt를 입력해 보았으나 502.. 계속 시도해보니 `ping -c {count} 8.8.8.8` 형식으로 되어있어 echo같은 명령어가 아니면 구문 자체에 에러가 나는 것
 - ?count=1; ls; echo로 디렉토리 구조 확인 -> flag가 없어 상위 디렉토리로 이동 -> 없어서 cd .. 3번감 -> flag-Yv2bc2i6.txt 파일 발견 -> cat 명령어로 읽기
 - 최종공격구문: `?count=1;%20cd%20..;%20cd%20..;%20cd%20..;%20cat%20flag-Yv2bc2i6.txt;%20echo`
 `codegate2024{75d6154bcacaebb3814d05253ed17fdb749fd0645e30349e1506c808b5d3d165}`
@@ -67,7 +66,7 @@ int __fastcall __noreturn main(int argc, const char **argv, const char **envp)
 ## Fool Calculator(misc)
 - time out이 굉장히 빠른 계산 문제
 
-```python
+```
 from pwn import *
 import re
 
@@ -100,7 +99,7 @@ if __name__ == "__main__":
 
 - python코드를 작성하여 문제 해결
 
-```sh
+```
 C:\Users\admin\Desktop\test.py:32: BytesWarning: Text is not bytes; assuming ASCII, no guarantees. See https://docs.pwntools.com/#bytes
   p.sendline(expression)
 [x] Receiving all data

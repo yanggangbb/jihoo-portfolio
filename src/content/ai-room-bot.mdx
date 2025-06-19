@@ -4,11 +4,10 @@ date: "2024-07-19"
 excerpt: "YOLO 모델을 활용한 실시간 인원수 탐지와 Kakao 챗봇 연동을 통해 AI융합실 출입 및 신청을 자동화한 프로젝트입니다."
 category: "개발"
 imageUrl: "/images/ai-room-bot-preview.png"
+award: "🏆 서울디지텍고등학교 2024 소프트웨어 해커톤 [최우수상]"
 ---
 
-# SDHS AI융합실 사용신청 챗봇
-
-<img src="/images/ai-room-bot-preview.png" alt="챗봇" width="300" style="display: block; margin: 0 auto;"/>
+![메인페이지](/images/ai-room-bot-preview.png)
 
 이 프로젝트는 교내 **AI융합실 출입 및 사용 신청 절차를 자동화**하기 위해 개발되었습니다. 카카오 비즈니스 챗봇 기반의 사용자 인터페이스와 YoLo 모델을 통한 실시간 객체 인식 기술을 결합하여, 학생들의 사용 편의성과 관리 효율성을 동시에 개선했습니다.
 
@@ -17,54 +16,54 @@ imageUrl: "/images/ai-room-bot-preview.png"
 ### 프로젝트 배경
 기존에는 AI융합실 출입 신청 카카오톡 오픈채팅방에 신청하는 방식으로 이뤄졌으나, 이는 다양한 한계점이 있었습니다.
 
-<li>신청 양식을 지키지 않아 정확한 신청 현황을 알기 힘들어 순번을 적기 어려운 점</li>
-<li>깜박하는 경우 등으로 퇴실 시 사진을 올리지 않는 점</li>
-<li>선생님들께서 신청 현황과 퇴실 사진을 하나하나 모니터링하기 힘든 점</li>
+- 신청 양식을 지키지 않아 정확한 신청 현황을 알기 힘들어 순번을 적기 어려운 점
+- 깜박하는 경우 등으로 퇴실 시 사진을 올리지 않는 점
+- 선생님들께서 신청 현황과 퇴실 사진을 하나하나 모니터링하기 힘든 점
 
 ### 프로젝트 목표
-<li>융합실 사용 신청의 편리성 증진</li>
-<li>관리자의 부담감 감소</li>
-<li>데이터베이스를 이용한 체계적인 관리</li>
+- 융합실 사용 신청의 편리성 증진
+- 관리자의 부담감 감소
+- 데이터베이스를 이용한 체계적인 관리
 
 ## 🛠️ 기술 스택
 
-<li>**챗봇 플랫폼**: Kakao Business</li>
-<li>**서버 개발**: Python, Flask</li>
-<li>**객체 탐지**: YOLO</li>
-<li>**데이터베이스**: SQLite</li>
-<li>**챗봇 - 서버 통신**: Localtunnel</li>
+- **챗봇 플랫폼**: Kakao Business
+- **서버 개발**: Python, Flask
+- **객체 탐지**: YOLO
+- **데이터베이스**: SQLite
+- **챗봇 - 서버 통신**: Localtunnel
 
 ## 🔑 주요 기능
 
 ### 1. 카카오 챗봇 기반 사용자 인터페이스
 
-<li>입실 / 퇴실 신청</li>
-<li>연장 / 조기 퇴실 신청</li>
-<li>사용 신청 현황 조회</li>
-<li>시설 문제 제보</li>
+- 입실 / 퇴실 신청
+- 연장 / 조기 퇴실 신청
+- 사용 신청 현황 조회
+- 시설 문제 제보
 
 ### 2. 실시간 인원수 탐지 기능
 
-<li>YOLO를 활용한 **객체 탐지 모델**로 AI융합실 내부 인원 수 실시간 추적</li>
-<li>출입 현황과 연동하여 자동화된 관리 가능</li>
+- YOLO를 활용한 **객체 탐지 모델**로 AI융합실 내부 인원 수 실시간 추적
+- 출입 현황과 연동하여 자동화된 관리 가능
 
 ### 3. 자동 메시지 발송 기능
 
-<li>Kakao API를 활용하여 **신청 처리 결과 자동 응답**</li>
-<li>관리자에게 이상 상황 자동 보고 (ex. 초과 인원 감지 시 알림 전송)</li>
+- Kakao API를 활용하여 **신청 처리 결과 자동 응답**
+- 관리자에게 이상 상황 자동 보고 (ex. 초과 인원 감지 시 알림 전송)
 
 ## 🧩 시스템 구조
 
-<img src="/images/ai-room-bot-architecture.png" alt="챗봇 아키텍처" width="800" style="display: block; margin: 0 auto;"/>
+![챗봇 아키텍처](/images/ai-room-bot-architecture.png)
 
-<li>챗봇에서 사용자의 입력을 받아 Flask 기반 스킬 서버로 전달</li>
-<li>스킬 서버는 DB를 통해 사용자 상태를 저장하고, YOLO 모델과 연동된 출입 데이터 확인</li>
-<li>결과는 다시 Kakao 플랫폼을 통해 사용자에게 전달</li>
+- 챗봇에서 사용자의 입력을 받아 Flask 기반 스킬 서버로 전달
+- 스킬 서버는 DB를 통해 사용자 상태를 저장하고, YOLO 모델과 연동된 출입 데이터 확인
+- 결과는 다시 Kakao 플랫폼을 통해 사용자에게 전달
 
-![YOLO 기반 객체 탐지](./image2.png)
+![YOLO 기반 객체 탐지](./images/ai-room-bot-architecture.png)
 
-<li>CCTV 또는 웹캠 입력을 통해 YOLO 모델이 실시간 인원 탐지 수행</li>
-<li>탐지 결과는 Flask 서버에서 후처리되어 신청 시스템과 연결</li>
+- CCTV 또는 웹캠 입력을 통해 YOLO 모델이 실시간 인원 탐지 수행
+- 탐지 결과는 Flask 서버에서 후처리되어 신청 시스템과 연결
 
-## <a href="https://github.com/yanggangbb/2024Hackathon" target="blank">🔗 GitHub 바로가기</a>
+## [🔗 GitHub 링크](https://github.com/yanggangbb/2024Hackathon)
 

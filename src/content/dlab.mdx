@@ -1,36 +1,64 @@
 ---
 title: "DLab"
-date: "2024-11-01"
+date: "2024-11-01 ~ 2024-11-15"
 excerpt: "실습실 예약과 노트북/태블릿 대여를 효율적으로 지원하는 AI 기반 플랫폼입니다."
 category: "개발"
-imageUrl: "/images/dlab.png"
+imageUrl: "/images/dlab/dlab.png"
+award: "🏆 서울디지텍고등학교 2024 웹앱경진대회 [대상]"
 ---
 
-# DLab  
-개발 기간: 2024.11.01 ~ 2024.11.15
-비고: 서울디지텍고등학교 2024 웹앱경진대회 [대상] / 팀프로젝트
+## 📖 프로젝트 개요  
+‘DLab’은 실습실 예약과 노트북/태블릿 대여를 간편하게 지원하는 플랫폼으로, 기존의 수기 작성이나 직접 요청 방식의 불편함을 해결하기 위해 개발되었습니다.  
+![메인페이지](/images/dlab/dlab.png)
 
-![메인페이지 이미지](../../public/images/profile.png)
+## 📝 기술 스택  
+React, Flask, FastAPI, HuggingFace, SQLite
 
-## 주요 개발 사항  
+## 💻 주요 개발 사항  
 - Figma를 이용한 UI디자인 및 프로토타입 제작  
 - SQLite를 이용한 데이터베이스 구조 설계 및 구축  
-- Flask를 사용한 백엔드 및 API 개발  
+- Flask 라우트 기반의 API 개발  
+- Flask session을 이용한 세션 기반 인증
 - HuggingFace의 all-MiniLM-L6-v2 모델을 이용한 추천 AI 구현  
 - FastAPI를 사용한 AI 추천 API 개발
 
-## 기술 스택  
-리액트, Flask, FastAPI, HuggingFace, SQLite
+## 🧩 시스템 구조
+![Dlab 아키텍처](/images/dlab/dlab_architecture.png)
 
-## 프로젝트 설명  
-‘DLab’은 실습실 예약과 노트북/태블릿 대여를 간편하게 지원하는 플랫폼으로, 기존의 수기 작성이나 직접 요청 방식의 불편함을 해결하기 위해 개발되었습니다.  
+## 💡 개발 관련 설명  
+### 🔙 Backend API
+Flask 기반의 백엔드로, 실습실 예약·기기 대여 관리 및 카카오 메시지 알림 기능을 제공합니다.
+- **Flask 기반 API 설계**
+  - `/submit_lab_application`, `/submit_device_rental`: JSON 데이터를 받아 DB에 저장
+  - `/api/lab_applications`, `/api/device_rentals`: 조건에 따른 데이터 조회 제공
+  - `/api/update_device_number`, `/api/update_return_date`: 상태 업데이트 API 제공
+  - `@app.route(..., methods=['POST'])` 와 같은 REST 스타일로 기능별 경로와 메서드를 분리
+    ![apply](/images/dlab/apply2.jpg)
+    ![machineApply](/images/dlab/machineApply2.jpg)
+- **SQLite 데이터베이스 연동**
+  - sqlite3 내장 모듈을 사용하여 실습실 신청(`lab_applications`)과 기기 대여(`device_rentals`) 테이블 구축
+  - 데이터 조회 시 `Row factory` 설정으로 딕셔너리 형태 반환 지원
+- **세션 기반 관리자 인증 기능**
+  - Flask의 session 객체를 활용하여 로그인 상태 유지
+  - `/admin_login`, `/admin_device`, `/admin_logout`을 통해 관리 기능 제어
+    ![message](/images/dlab/admin.jpg)
+- **카카오 알림톡 전송**
+  - 교실 예약 또는 대여 신청 시, 선생님들에게 관련 정보를 알림톡으로 전달해 실시간으로 확인할 수 있도록 구현
+  - `requests.post()`를 사용해 카카오 API 엔드포인트(`https://kapi.kakao.com/v2/api/talk/memo/default/send`)에 메시지 전송
+    ![message](/images/dlab/message.jpg)
 
-## 개발 관련 설명  
-SentenceTransformer 라이브러리의 all-MiniLM-L6-v2를 사용해 활동 요구사항과 교실 정보 간의 유사도를 계산하고, 프로그램 및 언어 지원 점수를 추가로 반영해 추천 결과를 도출합니다.  
-교실 예약 또는 대여 신청 시, 선생님들에게 관련 정보를 알림톡으로 전달해 실시간으로 확인할 수 있도록 구현하였습니다.
-```py
-print('hello')
-print('world!')
-```
-## GitHub  
-[바로가기](https://github.com/yanggangbb/2024Webapp)
+### 🤖 AI 추천 기능
+SentenceTransformer 라이브러리의 `all-MiniLM-L6-v2`를 사용해 활동 요구사항과 교실 정보 간의 유사도를 계산하고, 프로그램 및 언어 지원 점수를 추가로 반영해 추천 결과를 도출합니다.    
+- **SentenceTransformer (`all-MiniLM-L6-v2`)**
+  - 텍스트 간의 의미적 유사도를 계산할 수 있게 해주는 경량 모델인 `all-MiniLM-L6-v2` 사용
+  - 활동 요구사항과 교실 스펙을 문장 형태로 임베딩, 의미 기반 유사도 계산 
+  - 활동 설명과 교실 스펙 간의 의미적 유사도를 계산하여 비교
+    ![ai1](/images/dlab/ai.jpg)
+- **정규화 및 가중치 적용**
+  - 임베딩 유사도 외에도 프로그램 일치도, 언어 일치도를 계산하여 각각의 점수를 정규화 후 가중 합산
+    ![ai2](/images/dlab/ai2.jpg)
+
+## 🔗 GitHub
+- [yanggangbb/DLab](https://github.com/yanggangbb/DLab)
+
+

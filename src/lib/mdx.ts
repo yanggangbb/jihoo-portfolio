@@ -1,101 +1,55 @@
-import fs from "fs"
-import path from "path"
-import matter from "gray-matter"
+// src/lib/mdx.ts
 
-const contentDirectory = path.join(process.cwd(), "src/content")
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+
+const contentDirectory = path.join(process.cwd(), "src/content");
 
 export interface PostMeta {
-  title: string
-  date: string
-  excerpt: string
-  category: string
-  imageUrl: string
-  slug: string
+  title: string;
+  date: string;
+  excerpt: string;
+  category: string;
+  imageUrl: string;
+  slug: string;
+  award: string;
 }
 
 export function getPostBySlug(slug: string): { content: string; meta: PostMeta } {
-  try {
-    // 슬러그 검증
-    if (!slug || typeof slug !== "string") {
-      throw new Error("Invalid slug provided")
-    }
+  const filePath = path.join(contentDirectory, `${slug}.mdx`);
+  const fileContents = fs.readFileSync(filePath, "utf8");
+  const { data, content } = matter(fileContents);
 
-    // 경로 보안 검증
-    if (!/^[a-zA-Z0-9-_]+$/.test(slug)) {
-      throw new Error("Slug contains invalid characters")
-    }
-
-    const filePath = path.join(contentDirectory, `${slug}.mdx`)
-
-    if (!fs.existsSync(filePath)) {
-      throw new Error(`Post file not found: ${slug}`)
-    }
-
-    const fileContents = fs.readFileSync(filePath, "utf8")
-
-    if (!fileContents.trim()) {
-      throw new Error(`Post file is empty: ${slug}`)
-    }
-
-    // 간단한 matter 파싱
-    const matterResult = matter(fileContents)
-    const data = matterResult.data
-    const content = matterResult.content
-
-    if (!content.trim()) {
-      throw new Error(`Post content is empty: ${slug}`)
-    }
-
-    // 필수 메타데이터 검증
-    if (!data.title || !data.date || !data.excerpt || !data.category) {
-      throw new Error(`Missing required metadata for: ${slug}`)
-    }
-
-    return {
-      content: content.trim(),
-      meta: {
-        title: String(data.title),
-        date: String(data.date),
-        excerpt: String(data.excerpt),
-        category: String(data.category),
-        imageUrl: String(data.imageUrl || "/placeholder.svg"),
-        slug,
-      },
-    }
-  } catch (error) {
-    console.error(`Error reading MDX file for slug: ${slug}`, error)
-    throw error
-  }
+  return {
+    content: content.trim(),
+    meta: {
+      title: data.title,
+      date: data.date,
+      excerpt: data.excerpt,
+      category: data.category,
+      imageUrl: data.imageUrl || "/placeholder.svg",
+      award: data.award,
+      slug,
+    },
+  };
 }
 
 export function getAllPosts(): PostMeta[] {
-  try {
-    if (!fs.existsSync(contentDirectory)) {
-      console.warn(`Content directory does not exist: ${contentDirectory}`)
-      return []
-    }
+  const files = fs.readdirSync(contentDirectory);
 
-    const files = fs.readdirSync(contentDirectory)
-    const posts: PostMeta[] = []
+  return files
+    .filter(file => file.endsWith(".mdx"))
+    .map(file => {
+      const slug = file.replace(/\.mdx$/, "");
+      return getPostBySlug(slug).meta;
+    });
+}
 
-    for (const file of files) {
-      if (!file.endsWith(".mdx")) {
-        continue
-      }
-
-      const slug = file.replace(/\.mdx$/, "")
-      try {
-        const { meta } = getPostBySlug(slug)
-        posts.push(meta)
-      } catch (error) {
-        console.error(`Error processing post: ${slug}`, error)
-        // 개별 포스트 오류는 무시하고 계속 진행
-      }
-    }
-
-    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  } catch (error) {
-    console.error("Error getting all posts", error)
-    return []
-  }
+// ✅ 슬러그만 반환하는 함수 추가
+export async function getAllSlugs(): Promise<string[]> {
+  const files = fs.readdirSync(contentDirectory);
+  return files
+    .filter(file => file.endsWith(".mdx"))
+    .map(file => file.replace(/\.mdx$/, ""));
 }
