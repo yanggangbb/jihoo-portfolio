@@ -4,23 +4,23 @@ import { useEffect } from "react"
 import Link from "next/link"
 import { ArrowLeft, Calendar, Tag, Clock, FileText, Grid3X3 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import type { PostMeta } from "@/lib/mdx"
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { useMDXComponents } from "@/mdx-components"
 import AnimatedSection from "@/components/animatedSection"
 
+interface PostMeta {
+  title: string
+  date: string
+  category: string
+  excerpt: string
+  award?: string
+}
 
 interface PostPageClientProps {
-  content: string
+  content: React.ReactNode
   meta: PostMeta
 }
 
 export default function PostPageClient({ content, meta }: PostPageClientProps) {
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
-  const estimatedReadTime = Math.ceil(content.split(" ").length / 200)
+  const estimatedReadTime = Math.ceil((meta?.excerpt?.split(" ").length || 0) / 200)
 
   const getCategoryBadgeColor = (category: string) => {
     switch (category) {
@@ -33,12 +33,16 @@ export default function PostPageClient({ content, meta }: PostPageClientProps) {
     }
   }
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <AnimatedSection>
-    <main className="min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black text-white">
-      <section className="relative overflow-hidden px-4 pt-32 pb-16 sm:px-6 lg:px-8">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-emerald-500/5"></div>
-        <div className="relative mx-auto max-w-4xl">
+      <main className="min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black text-white">
+        <section className="relative overflow-hidden px-4 pt-32 pb-16 sm:px-6 lg:px-8">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-emerald-500/5" />
+          <div className="relative mx-auto max-w-4xl">
             <div className="mb-8 flex items-center justify-center">
               <Link href="/posts" className="group">
                 <div className="flex items-center gap-3 rounded-full border border-zinc-700/50 bg-zinc-900/50 px-6 py-3 backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/50 hover:bg-zinc-800/50 hover:shadow-lg hover:shadow-emerald-500/10">
@@ -78,34 +82,19 @@ export default function PostPageClient({ content, meta }: PostPageClientProps) {
               <p className="text-xxl text-zinc-400 leading-relaxed">{meta.award}</p>
               <p className="text-xl text-zinc-400 leading-relaxed">{meta.excerpt}</p>
             </div>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* <section className="px-4 pb-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">
-          <SlideInSection>
-            <div className="aspect-video w-full overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/50">
-              <img src={meta.imageUrl || "/placeholder.svg"} alt={meta.title} className="h-full w-full object-cover" />
-            </div>
-          </SlideInSection> 
-        </div>
-      </section> */}
-
-      <section className="px-4 pb-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">
-            <article
-              className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-p:text-zinc-300 prose-strong:text-white prose-code:text-cyan-400 prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800"
-            >
-              <MDXRemote
-                source={content}
-                components={useMDXComponents({})}
-              />
+        <section className="px-4 pb-16 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <article className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-p:text-zinc-300 prose-strong:text-white prose-code:text-cyan-400 prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800">
+              {content}
             </article>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <section className="px-4 pb-24 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">
+        <section className="px-4 pb-24 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl">
             <div className="flex items-center justify-center">
               <Link href="/posts" className="group">
                 <div className="flex items-center gap-4 rounded-2xl border border-zinc-700/50 bg-gradient-to-r from-zinc-900/80 to-zinc-800/80 px-8 py-4 backdrop-blur-sm transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-500/10 hover:scale-105">
@@ -122,9 +111,9 @@ export default function PostPageClient({ content, meta }: PostPageClientProps) {
                 </div>
               </Link>
             </div>
-        </div>
-      </section>
-    </main>
+          </div>
+        </section>
+      </main>
     </AnimatedSection>
   )
 }

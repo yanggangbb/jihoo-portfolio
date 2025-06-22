@@ -7,10 +7,18 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { FadeInSection, ScaleInSection } from "@/components/scroll-animations"
-import type { PostMeta } from "@/lib/mdx" // PostMeta 타입 임포트
+
+interface PostMeta {
+  slug: string
+  title: string
+  excerpt: string
+  category: string
+  date: string
+  imageUrl?: string
+}
 
 interface PostsPageClientProps {
-  initialPosts: PostMeta[] // 서버 컴포넌트로부터 받은 초기 게시물 데이터
+  initialPosts: PostMeta[]
 }
 
 export default function PostsPageClient({ initialPosts }: PostsPageClientProps) {

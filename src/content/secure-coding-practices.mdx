@@ -1,7 +1,7 @@
 ---
 title: "대표적인 웹 취약점 사례"
 date: "2025-06-15"
-excerpt: "웹 개발에서 흔히 발생하는 보안 취약점과 이를 예방하기 위한 코딩 방법을 소개합니다."
+excerpt: "웹 개발에서 흔히 발생하는 보안 취약점과 이를 예방하기 위한 코딩 방법을 조사하고 정리한 글 입니다."
 category: "개발"
 imageUrl: "/placeholder.svg?height=600&width=1200"
 award: ""
@@ -61,6 +61,14 @@ document.getElementById("output").textContent = sanitizeHtml(userInput);
 5. **HTTPS 사용**: 모든 통신은 HTTPS로 암호화
 6. **보안 헤더 설정**: Content-Security-Policy, X-XSS-Protection 등
 7. **의존성 관리**: 사용하는 라이브러리의 보안 취약점 정기적 점검
+
+## 참고자료 - OWASP Top 10
+![owasp-top-10](/images/owasp-top-10.png)
+해킹, 그 중에서도 우리의 생활과 밀접하게 닿아 있는 웹에 대한 해킹은 파급력이 강력합니다.    
+안전한 웹 개발을 위해서는 웹 해킹의 트렌드를 따라가고 그에 대한 선제적 방어 태세를 유지하는 것이 중요합니다.   
+**OWASP Top 10**은  가장 심각한 웹 애플리케이션 보안 위험을 나열한 목록입니다. 이 목록은 개발자, 
+보안 전문가 및 조직이 중요한 웹 애플리케이션 보안 위험을 식별하고 완화하기 위해 노력의 우선 순위를 정하는 데 도움이 되는 가이드로
+이를 잘 숙지하고 대처 방법을 아는 것이 중요합니다.
 
 ## 결론
 
