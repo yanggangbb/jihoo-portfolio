@@ -7,12 +7,12 @@ import { HeroAnimation } from "@/components/hero-animation"
 import { FadeInSection, SlideInSection, ScaleInSection } from "@/components/scroll-animations"
 import WorkTimeline from "@/components/work-timeline"
 import AchievementsSection from "@/components/achievements-section"
-import { getAllPosts } from "@/lib/mdx" // Import getAllPosts and PostMeta
+import { getAllPosts } from "@/lib/mdx" 
 
-export default function Home() {
-  const allPosts = getAllPosts()
+export default async function Home() {
+  const allPosts = await getAllPosts()
 
-  // Define slugs for projects and blog posts to categorize them
+  // 이후 필터링 로직 동일
   const projectSlugs = [
     "bmp-parse-exploit",
     "open-cpn-0day-analysis",
