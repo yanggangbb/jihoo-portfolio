@@ -480,13 +480,9 @@ export default async function Home() {
       <footer className="bg-black px-4 py-12 text-center text-zinc-500 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
           <div className="mb-4 flex justify-center space-x-6">
-            <Link href="https://github.com" className="hover:text-white">
+            <Link href="https://github.com/yanggangbb" className="hover:text-white">
               <Github className="h-5 w-5" />
               <span className="sr-only">GitHub</span>
-            </Link>
-            <Link href="https://linkedin.com" className="hover:text-white">
-              <Linkedin className="h-5 w-5" />
-              <span className="sr-only">LinkedIn</span>
             </Link>
             <Link href="mailto:yanggang0424@gmail.com" className="hover:text-white">
               <Mail className="h-5 w-5" />

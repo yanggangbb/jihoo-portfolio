@@ -167,19 +167,17 @@ export default function PostsPageClient({ initialPosts }: PostsPageClientProps) 
                   </span>
                 )}
               </p>
-              {(selectedCategory !== "전체" || searchQuery) && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedCategory("전체")
-                    setSearchQuery("")
-                  }}
-                  className="text-zinc-400 hover:text-white"
-                >
-                  필터 초기화
-                </Button>
-              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setSelectedCategory("전체")
+                  setSearchQuery("")
+                }}
+                className="text-zinc-400 hover:text-white"
+              >
+                {(selectedCategory !== "전체" || searchQuery) ? "필터 초기화" : ""}
+              </Button>
             </div>
           </FadeInSection>
         </div>
