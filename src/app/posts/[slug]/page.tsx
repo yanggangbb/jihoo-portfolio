@@ -7,9 +7,9 @@ interface PostPageProps {
   }
 }
 
-export default async function PostPage({ params }: PostPageProps) {
+export default async function PostPage(props: PostPageProps) {
   try {
-    const { slug } = params
+    const { slug } = props.params
     const postModule = await import(`@/content/${slug}.mdx`)
     const { metadata } = postModule
     const MDXContent = postModule.default
@@ -20,9 +20,9 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 }
 
-export async function generateMetadata({ params }: PostPageProps) {
+export async function generateMetadata(props: PostPageProps) {
   try {
-    const { slug } = params
+    const { slug } = props.params
     const postModule = await import(`@/content/${slug}.mdx`)
     const { metadata } = postModule
 
