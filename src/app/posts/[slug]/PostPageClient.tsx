@@ -28,6 +28,8 @@ export default function PostPageClient({ content, meta }: PostPageClientProps) {
         return "bg-cyan-900/30 text-cyan-400 border-cyan-900/50"
       case "개발":
         return "bg-emerald-900/30 text-emerald-400 border-emerald-900/50"
+      case "기타":
+        return "bg-purple-900/30 text-purple-400 border-purple-900/50"
       default:
         return "bg-zinc-800/50 text-zinc-400 border-zinc-700"
     }

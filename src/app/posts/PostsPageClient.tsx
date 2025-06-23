@@ -53,11 +53,12 @@ export default function PostsPageClient({ initialPosts }: PostsPageClientProps) 
     setFilteredPosts(filtered)
   }, [selectedCategory, searchQuery, posts])
 
-  const categories = ["전체", "보안", "개발"]
+  const categories = ["전체", "보안", "개발", "기타"]
   const categoryColors = {
     전체: "bg-gradient-to-r from-cyan-500 to-emerald-500",
     보안: "bg-gradient-to-r from-cyan-500 to-blue-500",
     개발: "bg-gradient-to-r from-emerald-500 to-green-500",
+    기타: "bg-gradient-to-r from-purple-500 to-pink-500",
   }
 
   const getCategoryBadgeColor = (category: string) => {
@@ -66,6 +67,8 @@ export default function PostsPageClient({ initialPosts }: PostsPageClientProps) 
         return "bg-cyan-900/30 text-cyan-400 border-cyan-900/50"
       case "개발":
         return "bg-emerald-900/30 text-emerald-400 border-emerald-900/50"
+      case "기타":
+        return "bg-purple-900/30 text-purple-400 border-purple-900/50"
       default:
         return "bg-zinc-800/50 text-zinc-400 border-zinc-700"
     }
