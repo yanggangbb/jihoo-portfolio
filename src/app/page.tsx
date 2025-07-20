@@ -14,7 +14,7 @@ export default async function Home() {
 
   // 이후 필터링 로직 동일
   const projectSlugs = [
-    "bmp-parse-exploit",
+    "2024-codegate-open-ctf-write-up",
     "open-cpn-0day-analysis",
     "ai-room-bot",
     "secure-coding-market",
