@@ -5,9 +5,10 @@ export const metadata = {
   category: "보안",
   imageUrl: "/images/opencpn-command-injection.png",
   award: "",
-};
+};	
 
-# OpenCPN Launcher Plugin - 사용자 정의 명령 실행을 통한 명령어 주입 취약점
+[[ENG] OpenCPN Launcher Plugin - Command Injection via User-defined Command Execution](./opencpn-rce-command-injection)  
+[[KOR] OpenCPN Launcher Plugin - 사용자 정의 명령 실행을 통한 명령어 주입 취약점](./opencpn-rce-command-injection-kor)  
 
 ### 1. 취약점 제목
 
@@ -109,5 +110,6 @@ Commands=cmd.exe /C start "" "C:\\Windows\\System32\\notepad.exe" &"C:\\Windows\
 3. OpenCPN 실행 후 Launcher Plugin의 “Test” 버튼 클릭
 4. notepad.exe 실행 이후 calc.exe 실행
 
-# 6. 소프트웨어 다운로드 링크
+### 6. 소프트웨어 다운로드 링크
 - https://opencpn.org/OpenCPN/info/downloadopencpn.html
+

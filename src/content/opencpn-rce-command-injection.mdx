@@ -5,9 +5,10 @@ export const metadata = {
   category: "보안",
   imageUrl: "/images/opencpn-command-injection.png",
   award: "",
+  hidden: true,
 };
 
-[[KOR] OpenCPN Launcher Plugin - Command Injection via User-defined Command Execution](./opencpn-rce-command-injection-kor)
+[[KOR] OpenCPN Launcher Plugin - 사용자 정의 명령 실행을 통한 명령어 주입 취약점](./opencpn-rce-command-injection-kor)
 
 **Vulnerability Title:** OpenCPN Launcher Plugin - Command Injection via User-defined Command Execution  
 **Vulnerability Summary:** The Launcher Plugin in OpenCPN executes user-defined commands by directly passing them to the system shell without proper filtering. This allows attackers to inject arbitrary shell metacharacters and execute unintended commands, resulting in a Command Injection vulnerability.  
@@ -52,4 +53,4 @@ Because the command is passed directly to the shell, it is possible to inject sh
 **Additional Materials (video, report attachments):**
 <Video src="/videos/opencpn-command-injection.mp4"/>
 
-[OpenCPN Launcher Plugin- 사용자 정의 명령 실행을 통한 명령어 주입 취약점](./opencpn-rce-command-injection-detail)
+[OpenCPN Launcher Plugin- 사용자 정의 명령 실행을 통한 명령어 주입 취약점 보고서](./opencpn-rce-command-injection-detail)
