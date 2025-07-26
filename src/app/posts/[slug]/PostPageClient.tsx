@@ -84,7 +84,7 @@ export default function PostPageClient({ content, meta }: PostPageClientProps) {
   return (
     <AnimatedSection>
       <main className="relative min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black text-white">
-        <aside className="hidden xl:block fixed top-32 right-8 w-[15vw] min-w-[9rem] max-w-xs max-h-[60vh] overflow-auto text-sm space-y-2 text-zinc-400">
+        <aside className="hidden xl:block fixed top-32 right-8 w-[15vw] min-w-[9rem] max-w-xs max-h-[60vh] overflow-auto text-sm space-y-2 text-zinc-400 z-[30]">
           {headings.map((h) => (
             <a
               key={h.id}
