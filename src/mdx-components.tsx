@@ -107,7 +107,7 @@ export function Anchor(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   return (
     <a
       {...props}
-      className="text-blue-600 hover:underline"
+      className="text-blue-500 no-underline hover:no-underline"
       target={props.target ?? '_blank'}
       rel={props.rel ?? 'noopener noreferrer'}
     />
