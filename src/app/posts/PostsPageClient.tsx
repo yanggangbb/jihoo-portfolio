@@ -15,6 +15,7 @@ interface PostMeta {
   category: string
   date: string
   imageUrl?: string
+  hidden?: boolean
 }
 
 interface PostsPageClientProps {
@@ -22,8 +23,10 @@ interface PostsPageClientProps {
 }
 
 export default function PostsPageClient({ initialPosts }: PostsPageClientProps) {
-  const [posts, setPosts] = useState(initialPosts) // 초기 데이터로 상태 설정
-  const [filteredPosts, setFilteredPosts] = useState(initialPosts)
+  const visiblePosts = initialPosts.filter((post) => !post.hidden)
+
+  const [posts, setPosts] = useState(visiblePosts)
+  const [filteredPosts, setFilteredPosts] = useState(visiblePosts)
   const [selectedCategory, setSelectedCategory] = useState("전체")
   const [searchQuery, setSearchQuery] = useState("")
 
