@@ -1,0 +1,50 @@
+export const metadata = {
+  title: "OpenCPN RCE - Command Injection",
+  date: "2025-05-01 ~ 2025-08-12",
+  excerpt: "OpenCPN Launcher Plugin - 사용자 정의 명령 실행을 통한 명령어 주입 취약점",
+  category: "보안",
+  imageUrl: "/images/opencpn.png",
+  award: "",
+};
+
+**취약점 제목:** OpenCPN Launcher Plugin - 사용자 정의 명령 실행을 통한 명령어 주입 취약점  
+**취약점 요약:** OpenCPN의 Launcher Plugin은 사용자가 정의한 명령어를 필터링 없이 운영체제 쉘에 그대로 전달하여 실행합니다. 이로 인해 공격자는 쉘 메타문자를 이용해 임의의 명령어를 주입하고 실행할 수 있어, Command Injection이 가능합니다.  
+**제조사:** GitHub Open Source Project  
+**소프트웨어명:** OpenCPN  
+**버전:** OpenCPN 5.12.0, Launcher Plugin v1.3.5   
+**소프트웨어 유형:** ECS (Electronic Chart System)  
+**공격 유형:** 명령어 주입 (Command Injection)  
+**영향:** 임의 코드 실행  
+**취약한 파일명:** `launcher_pi.cpp` (`nohal/launcher_pi.cpp`)  
+**취약한 함수명:** `LauncherUIDialog::OnBtnClick`  
+**취약한 파라미터:** `wxExecute(cmd, wxEXEC_ASYNC)`  
+**취약점 발생 환경:** Windows
+
+**Proof of Concept:**  
+OpenCPN Launcher Plugin에서 필터링 없이 명령어를 쉘로 실행하는 코드를 확인
+
+```cpp
+void LauncherUIDialog::OnBtnClick(wxCommandEvent& event){
+    LauncherButton* button = (LauncherButton*)event.GetEventObject();
+    if (m_hide_on_btn)
+        this->Hide();
+    wxString cmd = button->GetCommand();
+    if (cmd.StartsWith(_T("KBD:"))) {
+        SendKbdEvents(cmd);
+    } else {
+        cmd.Replace(_T( "%BOAT_LAT%" ), wxString::Format(_T( "%f" ), m_Lat));
+        cmd.Replace(_T( "%BOAT_LON%" ), wxString::Format(_T( "%f" ), m_Lon));
+        cmd.Replace(_T( "%BOAT_SOG%" ), wxString::Format(_T( "%f" ), m_Sog));
+        cmd.Replace(_T( "%BOAT_COG%" ), wxString::Format(_T( "%f" ), m_Cog));
+        cmd.Replace(_T( "%BOAT_VAR%" ), wxString::Format(_T( "%f" ), m_Var));
+        cmd.Replace(_T( "%BOAT_FIXTIME%" ), wxString::Format(_T( "%d" ), m_FixTime));
+        cmd.Replace(_T( "%BOAT_NSATS%" ), wxString::Format(_T( "%d" ), m_nSats));
+        wxExecute(cmd, wxEXEC_ASYNC);
+    }
+    event.Skip();
+}
+```
+쉘 메타문자(&, | 등)를 이용하여 여러 명령어를 한번에 실행하는 Command Injection이 가능
+
+**취약점 기타 (파일 첨부 영상, 보고서 첨부):**  
+<Video src="/videos/opencpn-command-injection.mp4"/>    
