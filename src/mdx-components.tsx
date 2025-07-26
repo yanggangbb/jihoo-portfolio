@@ -1,6 +1,7 @@
 import { MDXComponents } from 'mdx/types';
 import { StackBlitzEmbed } from './components/stack-blitz-embed';
 
+// Heading components
 export function Heading1(props: React.HTMLAttributes<HTMLHeadingElement>) {
   return <h1 {...props} className="text-4xl font-bold mb-4" />;
 }
@@ -25,6 +26,7 @@ export function Heading6(props: React.HTMLAttributes<HTMLHeadingElement>) {
   return <h6 {...props} className="text-sm font-bold mb-4" />;
 }
 
+// Text components
 export function Paragraph(props: React.HTMLAttributes<HTMLParagraphElement>) {
   return <p {...props} className="mb-4 leading-relaxed" />;
 }
@@ -58,11 +60,12 @@ export function Code(props: React.HTMLAttributes<HTMLElement>) {
   return (
     <code
       {...props}
-      className="bg-gray-800 rounded px-1 py-0.5 text-sm font-mono text-gray-800"
+      className="bg-gray-800 rounded px-1 py-0.5 text-sm font-mono text-gray-100"
     />
   );
 }
 
+// Media components
 export function Image(props: React.ImgHTMLAttributes<HTMLImageElement>) {
   return (
     <img
@@ -73,17 +76,45 @@ export function Image(props: React.ImgHTMLAttributes<HTMLImageElement>) {
   );
 }
 
+export function Video(props: React.VideoHTMLAttributes<HTMLVideoElement>) {
+  return (
+    <video
+      {...props}
+      controls
+      className="my-4 rounded shadow-md mx-auto max-w-full"
+    >
+      Your browser does not support the video tag.
+    </video>
+  );
+}
+
+export function YouTube({ videoId }: { videoId: string }) {
+  return (
+    <div className="my-4 aspect-video w-full max-w-3xl mx-auto">
+      <iframe
+        className="w-full h-full rounded"
+        src={`https://www.youtube.com/embed/${videoId}`}
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    </div>
+  );
+}
+
+// Link components
 export function Anchor(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   return (
     <a
       {...props}
       className="text-blue-600 hover:underline"
-      target={props.target ?? "_blank"}
-      rel={props.rel ?? "noopener noreferrer"}
+      target={props.target ?? '_blank'}
+      rel={props.rel ?? 'noopener noreferrer'}
     />
   );
 }
 
+// Component map for MDX
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
@@ -101,7 +132,10 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     pre: Pre,
     code: Code,
     img: Image,
+    video: Video,
     a: Anchor,
-    StackBlitzEmbed: StackBlitzEmbed, 
+    StackBlitzEmbed,
+    Video,
+    YouTube,
   };
 }
