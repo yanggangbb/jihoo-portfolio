@@ -12,12 +12,12 @@ import { getAllPosts } from "@/lib/mdx"
 export default async function Home() {
   const allPosts = await getAllPosts()
 
-  // 이후 필터링 로직 동일
+  // 메인페이지에 표시할 문서들
   const projectSlugs = [
     "2024-codegate-open-ctf-write-up",
     "open-cpn-0day-analysis",
     "ai-room-bot",
-    "secure-coding-market",
+    "dbase",
     "dlab",
   ]
   const blogSlugs = ["2024-codegate-open-ctf-write-up", "secure-coding-practices"]
