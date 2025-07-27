@@ -148,15 +148,15 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill, index }) => {
 
   return (
     <motion.div
-      className="relative flex flex-col items-center justify-center"
+      className="relative flex flex-col items-center justify-center w-fit"
       initial={{ opacity: 0, scale: 0.8, y: 20 }}
       whileInView={{
         opacity: 1,
         scale: 1,
         y: 0,
         transition: {
-          duration: 0.6,
-          delay: index * 0.1,
+          duration: 0.4,
+          delay: index * 0.05,
           ease: "easeOut",
         },
       }}
@@ -173,7 +173,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill, index }) => {
           size={80}
           strokeWidth={5}
           color={getColorByCategory(skill.category)}
-          delay={index * 0.15 + 0.3}
+          delay={index * 0.05 + 0.3}
           isVisible={isVisible}
         />
 
@@ -211,7 +211,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill, index }) => {
         }}
         transition={{
           duration: 0.5,
-          delay: index * 0.15 + 0.8,
+          delay: index * 0.05 + 0.6,
           ease: "easeOut",
         }}
       >
@@ -226,8 +226,8 @@ const container = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
+      staggerChildren: 0.05,
+      delayChildren: 0.1,
     },
   },
 }
@@ -251,7 +251,7 @@ export default function SkillsSection() {
           Languages & Framework
         </motion.h3>
         <motion.div
-          className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6"
+          className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6 justify-items-center mx-auto max-w-screen-md"
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -275,7 +275,7 @@ export default function SkillsSection() {
           Tools
         </motion.h3>
         <motion.div
-          className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6"
+          className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6 justify-items-center mx-auto max-w-screen-md"
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -299,7 +299,7 @@ export default function SkillsSection() {
           Others
         </motion.h3>
         <motion.div
-          className="grid grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-2"
+          className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-2 justify-items-center mx-auto max-w-screen-md"
           variants={container}
           initial="hidden"
           whileInView="show"
