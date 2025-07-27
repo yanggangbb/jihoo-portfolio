@@ -8,6 +8,7 @@ import { FadeInSection, SlideInSection, ScaleInSection } from "@/components/scro
 import WorkTimeline from "@/components/work-timeline"
 import AchievementsSection from "@/components/achievements-section"
 import { getAllPosts } from "@/lib/mdx" 
+import SideNav from "@/components/SideNav"
 
 export default async function Home() {
   const allPosts = await getAllPosts()
@@ -28,6 +29,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-black to-zinc-900 text-white">
+      {/* <SideNav /> */}
       {/* Hero Section */}
       <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-24 sm:px-6 lg:px-8">
         <div className="absolute inset-0 z-0">

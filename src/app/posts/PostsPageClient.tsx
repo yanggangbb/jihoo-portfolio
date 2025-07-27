@@ -108,7 +108,7 @@ export default function PostsPageClient({ initialPosts }: PostsPageClientProps) 
               </h1>
               <div className="mx-auto mb-6 h-1 w-32 rounded bg-gradient-to-r from-cyan-500 to-emerald-500"></div>
               <p className="mx-auto max-w-2xl text-xl text-zinc-400">
-                보안 연구와 개발에 관한 인사이트를 공유합니다. 실무 경험과 학습 과정을 통해 얻은 지식을 나누고 있습니다.
+                보안 연구와 개발에 관한 인사이트를 공유합니다.
               </p>
             </div>
           </FadeInSection>
