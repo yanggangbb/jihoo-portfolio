@@ -13,13 +13,13 @@ interface Achievement {
 
 const achievements: Achievement[] = [
   // 자격증
-  { title: "정보처리기능사", type: "certificate" },
-  { title: "공간정보융합기능사", type: "certificate" },
-  { title: "리눅스마스터2급", type: "certificate" },
-  { title: "ITQ OA Master", type: "certificate" },
-  { title: "IEQ지도사", type: "certificate" },
-  { title: "IDCL Professional", type: "certificate" },
-  { title: "해킹보안전문가 3급", type: "certificate" },
+  { title: "정보처리기능사", type: "certificate", description: "한국산업인력공단" },
+  { title: "공간정보융합기능사", type: "certificate", description: "한국산업인력공단" },
+  { title: "리눅스마스터2급", type: "certificate", description: "한국정보통신진흥협회" },
+  { title: "ITQ OA Master", type: "certificate", description: "한국생산성본부" },
+  { title: "IEQ지도사", type: "certificate", description: "한국생산성본부" },
+  { title: "IDCL Professional", type: "certificate", description: "IDCL Korea" },
+  { title: "해킹보안전문가 3급", type: "certificate", description: "한국해킹보안협회" },
 
   // 수상경력
   { title: "공간정보 소프트웨어 해커톤", type: "award", year: "2024", description: "서울디지텍고등학교 [최우수상]" },
