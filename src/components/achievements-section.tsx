@@ -22,13 +22,13 @@ const achievements: Achievement[] = [
   { title: "해킹보안전문가 3급", type: "certificate" },
 
   // 수상경력
-  { title: "공간정보 소프트웨어 해커톤", type: "award", year: "2024", description: "최우수상" },
-  { title: "SW동행 데모데이", type: "award", year: "2024", description: "대상, 특별상" },
-  { title: "화이트해커 경진대회", type: "award", year: "2024", description: "대상, 특별상" },
-  { title: "서울특별시 공간정보 활용 공모전", type: "award", year: "2024", description: "우수상" },
-  { title: "제2회 정보보호 골든벨", type: "award", year: "2024", description: "3등" },
-  { title: "공간정보 웹앱 경진대회", type: "award", year: "2024", description: "대상" },
-  { title: "공간정보 포트폴리오 경진대회", type: "award", year: "2024", description: "대상" },
+  { title: "공간정보 소프트웨어 해커톤", type: "award", year: "2024", description: "서울디지텍고등학교 [최우수상]" },
+  { title: "SW동행 데모데이", type: "award", year: "2024", description: "과학기술정보통신부 [대상], 한국교육방송공사 [특별상]" },
+  { title: "화이트해커 경진대회", type: "award", year: "2024", description: "교육부 [대상], 현대오토에버 [특별상]" },
+  { title: "서울특별시 공간정보 활용 공모전", type: "award", year: "2024", description: "서울특별시 [우수상]" },
+  { title: "제2회 정보보호 골든벨", type: "award", year: "2024", description: "한국인터넷진흥원 [3등]" },
+  { title: "공간정보 웹앱 경진대회", type: "award", year: "2024", description: "서울디지텍고등학교 [대상]" },
+  { title: "공간정보 포트폴리오 경진대회", type: "award", year: "2024", description: "서울디지텍고등학교 [대상]" },
 ]
 
 const container = {

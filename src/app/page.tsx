@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { ArrowRight, Github, Linkedin, Mail, User, Globe, AtSign } from "lucide-react"
+import { FaDiscord } from "react-icons/fa"
 import { Button } from "@/components/ui/button"
 import ProjectCard from "@/components/project-card"
 import SkillsSection from "@/components/skills-section"
@@ -410,7 +411,7 @@ export default async function Home() {
             </div>
           </SlideInSection>
 
-          <div className="grid gap-8 md:grid-cols-2">
+          <div className="grid gap-8 md:grid-cols-1 justify-items-center">
             <ScaleInSection delay={0.1}>
               <div className="space-y-6 rounded-lg border border-zinc-800 bg-zinc-900/50 p-6">
                 <h3 className="text-xl font-bold">연락처 정보</h3>
@@ -431,48 +432,13 @@ export default async function Home() {
                     github.com/yanggangbb
                   </a>
                 </div>
+                <div className="flex items-center gap-4">
+                  <FaDiscord size={20} color="#22d3ee" />
+                  <a href="https://discord.com/users/1007530866534273064" target="_blank" className="text-zinc-300 hover:text-white">
+                    yanggang0724_
+                  </a>
+                </div>
               </div>
-            </ScaleInSection>
-
-            <ScaleInSection delay={0.2}>
-              <form className="space-y-6 rounded-lg border border-zinc-800 bg-zinc-900/50 p-6">
-                <div>
-                  <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                    이름
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
-                    placeholder="홍길동"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-medium">
-                    이메일
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
-                    placeholder="email@example.com"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="message" className="mb-2 block text-sm font-medium">
-                    메시지
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={4}
-                    className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
-                    placeholder="메시지를 입력하세요..."
-                  ></textarea>
-                </div>
-                <Button className="w-full bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600">
-                  메시지 보내기
-                </Button>
-              </form>
             </ScaleInSection>
           </div>
         </div>
