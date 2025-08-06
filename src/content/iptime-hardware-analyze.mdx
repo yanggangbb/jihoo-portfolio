@@ -1,0 +1,74 @@
+export const metadata = {
+  title: "ipTIME A2004NS-R 하드웨어 분석",
+  date: "2025-07-28 ~ 2025-08-08",
+  excerpt: "공유기 ipTIME A2004NS-R 하드웨어 분석 프로젝트",
+  category: "보안",
+  imageUrl: "/images/iptime/2.png",
+  award: "",
+};
+
+## 1. 개요
+본 보고서는 ipTIME A2004NS-R 공유기의 하드웨어 및 UART 인터페이스 분석을 통해 펌웨어 접근 가능성 및 보안 진단 사전 준비를 목적으로 진행한 리버스 엔지니어링 작업의 내용을 담고 있다. 해당 공유기는 중고 거래를 통해 1만 원에 구매하였으며, 방학 기간을 활용하여 분석을 시도하였다.
+
+## 2. 장비 사양 및 모델 정보
+![image.png](/images/iptime/2.png)
+- **모델명**: ipTIME A2004NS-R
+- **제조사**: EFM 네트웍스
+- **구매처**: 중고거래 (당근마켓)
+- **기능 요약**: 4포트 유선, 2.4/5GHz 듀얼밴드 WiFi, USB 지원 NAS 기능 탑재
+
+## 3. 하드웨어 분해
+### 3.1 분해 절차
+1. 공유기 하단 고무패드를 제거하면 숨겨진 나사 4개가 드러난다.
+<img src="/images/iptime/3-1-1.png" alt="분해1" width="60%" style={{ display: "block", margin: "0 auto" }}/>
+2. 나사를 제거하고 하판을 분리하면 내부 기판이 나타난다.
+<img src="/images/iptime/3-1-2.png" alt="분해2" width="60%" style={{ display: "block", margin: "0 auto" }}/>
+3. 안테나와 기판이 직접 연결되어 있어, 안테나 고정 나사 또한 전부 분리해야 기판을 완전히 분리할 수 있다.
+<img src="/images/iptime/3-1-3.png" alt="분해3" width="60%" style={{ display: "block", margin: "0 auto" }}/>
+
+### 3.2 기판 구성 및 칩셋 식별
+- 공유기 기판에는 주요 컨트롤러 및 메모리 칩셋이 장착되어 있다.
+- 일반적으로 UART 포트는 제거되어있는 경우가 많지만 해당 모델은 UART 포트가 존재한다.
+<img src="/images/iptime/3-2.png" alt="UART" width="60%" style={{ display: "block", margin: "0 auto" }}/>
+
+## 4. UART 인터페이스 분석
+### 4.1 핀 식별
+UART 핀은 4핀으로 구성되어 있으며, 멀티미터를 이용하여 다음과 같은 방식으로 식별하였다.
+1. **GND**: 전원 커넥터와 직결된 핀을 기준으로 도통 테스트 실시 (멀티미터 부저모드 이용)
+<Video src="/images/iptime/4-1-1.mp4" alt="GND 식별" width="40%" style={{ display: "block", margin: "0 auto" }}/>   
+2. **VCC**: DCV 모드에서 (검정 - GND, 빨강 - 탐색 핀)측정 시 약 3.2V ~ 3.4V의 안정된 전압 출력
+<img src="/images/iptime/4-1-2.png" alt="VCC 식별" width="40%" style={{ display: "block", margin: "0 auto" }}/>
+3. **TX**: 전원 공급 후 DCV 모드로 측정 시 전압이 불안정하게 출력됨
+<img src="/images/iptime/4-1-3.png" alt="TX 식별" width="80%" style={{ display: "block", margin: "0 auto" }}/>
+4. **RX**: 측정 시 전압이 거의 없거나 0V 수준
+<img src="/images/iptime/4-1-4.png" alt="RX 식별" width="40%" style={{ display: "block", margin: "0 auto" }}/>
+| 최종 핀 구성 (위쪽부터): GND – RX – TX – VCC
+<img src="/images/iptime/4-1-5.png" alt="UART 핀" width="60%" style={{ display: "block", margin: "0 auto" }}/>
+
+### 4.2 PC와의 연결
+<img src="/images/iptime/4-2.png" alt="PC 연결" width="60%" style={{ display: "block", margin: "0 auto" }}/>
+- **장비 사용**: USB to TTL (UART) 변환기, 점퍼케이블
+- **연결 시 주의점**: 
+  - RX ↔ TX, TX ↔ RX로 교차 연결 필요
+  - 전원선으로 전력을 공급해주기 때문에 VCC는 연결하지 않음
+- **드라이버 설치**: 장치 관리자에서 인식되지 않을 경우, 칩셋 제조사의 USB-to-UART 브릿지 드라이버를 설치해야 함
+  - USB to TTL 장비에 써있는 드라이버 설치 (CP210x 사용) [드라이버 링크](https://www.silabs.com/software-and-tools/usb-to-uart-bridge-vcp-drivers?tab=downloads)
+
+### 4.3 터미널 접근
+장치관리자 > 포트(COM & LPT)에서 COM포트 넘버 확인
+<img src="/images/iptime/4-3-1.png" alt="COM PORT" width="60%" style={{ display: "block", margin: "0 auto" }}/>
+- **툴 사용**: PuTTY
+- **설정값**:
+  - Connection Type: Serial
+  - Serial line: (확인한 COM포트)
+  - Speed: 38400 (부팅 로그를 확인하며 조정 필요)
+<img src="/images/iptime/4-3-2.png" alt="COM PORT" width="60%" style={{ display: "block", margin: "0 auto" }}/>
+PuTTY에 연결 된 화면 (부팅로그)
+<img src="/images/iptime/4-3-3.png" alt="COM PORT" width="60%" style={{ display: "block", margin: "0 auto" }}/>
+해당 설정으로 연결을 시도하였으나, 무한부팅으로 인해 쉘 접근이 실패하였고, U-Boot 접근 또한 불가능하였다.
+
+## 5. 향후 계획 및 한계
+UART를 통한 콘솔 쉘 접근에 실패함에 따라, 차선책으로 SPI Flash를 직접 덤프하여 펌웨어를 분석하는 방향을 고려 중이다. 다만, 이를 위한 추가 장비(CH341A, 클립 등) 구매가 필요하므로, 현재 프로젝트는 하드웨어 분해 및 인터페이스 식별 단계에서 마무리하였다.
+
+## 6. 결론
+ipTIME A2004NS-R 공유기의 하드웨어 구조와 UART 인터페이스에 대한 기초 분석을 성공적으로 수행하였다. UART 핀 식별 및 연결은 완료되었으나, UART 콘솔 접근에는 제한이 있었으며, 이는 보안상의 제한 또는 UART 디버깅 인터페이스가 차단된 구조일 가능성이 있다. 이후 SPI 플래시를 직접 덤프하는 방식으로 펌웨어 분석을 진행할 수 있다면, 공유기의 보안 취약점을 보다 심도 깊게 분석할 수 있을 것으로 기대된다.
