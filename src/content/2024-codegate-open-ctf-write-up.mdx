@@ -7,13 +7,13 @@ export const metadata = {
   award: "",
 };
 
-## Shopping Mall(web)
+## 1. Shopping Mall(web)
 - 로그인 기능이 존재하고, 구매 목록이 하단에 뜨는 쇼핑몰 사이트
 - 로그인창에 인젝션공격(admin' #)
 - 구매목록에 플래그 출력
 - flag: `codegate2024{36a271873875eaea1f270df5284eb4eb668b73c96ca3f80303414ffb23e163f8}`
 
-## genesisCrack(rev)
+## 2. genesisCrack(rev)
 - 입력값이 인증 키 값과 같다면  Success, 틀리면 경고창을 출력하는 exe 프로그램
 - IDA로 분석, 바로 if문으로 입력값과 인증 키를 비교중(flag = 인증 키 값)
 ```
@@ -47,14 +47,14 @@ int __fastcall __noreturn main(int argc, const char **argv, const char **envp)
 ```
 - flag: `codegate2024{3502214347}`
 
-## Gary the Snail(web)
+## 3. Gary the Snail(web)
 - command 인젝션 취약점이 존재하는 사이트(get요청으로 count값을 받는데 검증없이 command구문으로 삽입)
 - ?count=1; cat flag.txt를 입력해 보았으나 502.. 계속 시도해보니 `ping -c {count} 8.8.8.8` 형식으로 되어있어 echo같은 명령어가 아니면 구문 자체에 에러가 나는 것
 - ?count=1; ls; echo로 디렉토리 구조 확인 -> flag가 없어 상위 디렉토리로 이동 -> 없어서 cd .. 3번감 -> flag-Yv2bc2i6.txt 파일 발견 -> cat 명령어로 읽기
 - 최종공격구문: `?count=1;%20cd%20..;%20cd%20..;%20cd%20..;%20cat%20flag-Yv2bc2i6.txt;%20echo`
 - flag: `codegate2024{75d6154bcacaebb3814d05253ed17fdb749fd0645e30349e1506c808b5d3d165}`
 
-## Fool Calculator(misc)
+## 4. Fool Calculator(misc)
 - time out이 굉장히 빠른 계산 문제
 ```
 from pwn import *
