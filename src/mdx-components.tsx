@@ -114,6 +114,38 @@ export function Anchor(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   );
 }
 
+export function Figure({
+  src,
+  alt,
+  caption,
+  width = "60%",
+}: {
+  src: string;
+  alt: string;
+  caption?: string;
+  width?: string;
+}) {
+  return (
+    <figure style={{ textAlign: "center" }}>
+      <img
+        src={src}
+        alt={alt}
+        style={{
+          display: "block",
+          margin: "0 auto",
+          width: width,
+        }}
+        className="my-4 rounded shadow-md"
+      />
+      {caption && (
+        <figcaption style={{ fontSize: "0.8em", color: "#909090" }}>
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
 // Component map for MDX
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -137,5 +169,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     StackBlitzEmbed,
     Video,
     YouTube,
+    Figure,
   };
 }
