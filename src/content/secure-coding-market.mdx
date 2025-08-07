@@ -7,13 +7,18 @@ export const metadata = {
   award: "",
 };
 
-## 📖 프로젝트 개요  
+## 1. 프로젝트 개요  
+![My Market](/images/secure-coding-market.png)
 ‘My Market’은 중고마켓 플랫폼 개발을 통한 개발 및 시큐어코딩 지식 학습을 위한 프로젝트로, 보안 취약점을 최대한 방어하는 데 집중하였습니다.
 
-## 📝 기술 스택  
-Html, Css, Js, Flask, SQLite, AWS EC2
+## 2. 기술 스택  
+**Frontend**: Html, Css, Js  
+**Backend**: Flask  
+**Database**: SQLite  
+**Deploy**: AWS EC2
 
-### 기능 요구사항
+## 3. 요구사항
+### 3-1. 기능 요구사항
 - 사용자 가입, 로그인, 프로필 수정  
 - 상품 등록, 조회, 검색  
 - 실시간 채팅  
@@ -21,34 +26,42 @@ Html, Css, Js, Flask, SQLite, AWS EC2
 - 캐시를 활용한 송금 기능  
 - 관리자 페이지 (상품/사용자/채팅 관리)
 
-### 비기능 요구사항
+### 3-2. 비기능 요구사항
 - 비밀번호 암호화 저장  
 - 유지보수성 고려한 모듈화 코드 구성  
 
-## 💻 주요 개발 사항 
+## 4. 주요 개발 사항 
 - `Flask-Login`으로 세션/인증 처리  
 - `Flask-WTF + SQLAlchemy`로 상품 등록, ORM 구현  
 - socket 통신을 활용한 실시간 채팅 기능 구현  
 - `Flask-Admin`을 이용한 관리자 페이지 구성  
 
-### 보안 및 인증
+### 4-1. 보안 및 인증
 - `bcrypt`로 비밀번호 해시 암호화  
 - `Flask-WTF`로 XSS, SQL Injection, CSRF 방지  
 - 프론트+백엔드 양단의 입력 길이 검증  
 
-### 기능 작동 
+### 4-2. 기능 작동 
 - 회원가입 / 로그인 페이지
 - 대시보드 및 상품 검색 
 - 실시간 채팅 기능 
 - 상품 등록 / 확인 페이지 
+- 프로필 및 소개글 작성
+- 신고하기 페이지
 - 관리자 페이지(사용자, 상품, 채팅 관리)
 
-### 테스트 계정
+## 5. 테스트 수행
+### 5-1. 테스트 계정
 - ID: `test`  
 - PW: `test1234`
-
-## 🔒 발견된 보안 취약점 및 조치
-
+### 5-2. 테스트 내용
+- 상품 / 판매자명으로 검색
+- 새 상품 등록
+- 상품 구매
+- 실시간 채팅
+- 프로필 소개글 수정
+- 사용자 / 판매글 신고
+## 5-3. 발견된 보안 취약점 및 조치
 1. **비밀번호 평문 저장**  
    → bcrypt 해싱으로 암호화 저장  
 2. **폼 입력값 검증 부족**  
@@ -56,6 +69,8 @@ Html, Css, Js, Flask, SQLite, AWS EC2
 3. **폼 입력 길이 제한 없음**  
    → 프론트/백엔드 양측에 입력 길이 제한 추가  
 
-## 🔗 GitHub
+## 6. 링크
+### 6-1. GitHub
 - [yanggangbb/secure-coding](https://github.com/yanggangbb/secure-coding)
+### 6-2. 배포
 - [배포 페이지](http://yanggangmarket.kro.kr/)

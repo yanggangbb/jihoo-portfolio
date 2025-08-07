@@ -14,6 +14,7 @@ Rev 2문제, Pwn 4문제, Misc 2문제로 이루어져 있었고 이후에 문�
 ## 1. locked not safely(rev)
 - 여러 센서 값이 동시에 올라오는 차량 시스템에서, 일부 센서가 의도적으로 통신 잠금을 무시해 잘못된 값을 보내는 상황을 가정한 문제
 - 센서 값(Counter)이 정확히 누적되지 않는 이유를 분석하고, 이를 수정해 정상적으로 데이터가 반영되도록 바이너리를 패치
+- 정상적으로 고치는 것 보다는 그냥 조건문을 우회하는게 더 쉬울 것 같아 방향을 그렇게 잡고 분석 진행
 - IDA를 통해 `locked_not_safely.exe` 분석, main 함수 내부에서 다음과 같은 조건문을 확인
   ```asm
   cmp     eax, 0x4C4B40       ; 5000000
@@ -127,15 +128,11 @@ Rev 2문제, Pwn 4문제, Misc 2문제로 이루어져 있었고 이후에 문�
 - flag: `AH{f1nd_3ntRy_p01nT_m4k3s_y0u_h4ppY}`
 
 ## 후기
-<figure style={{ textAlign: "center" }}>
-  <img
-    src="/images/codegate-autohack-mini-ctf.png"
-    alt="codegate-autohack-mini-ctf"
-    style={{ display: "block", margin: "0 auto", width: "60%" }}
-  />
-  <figcaption style={{ fontSize: "0.9em", color: "#555" }}>
-    Write Up 쓰면서 알았는데 서울디지털고등학교 뭐지..?
-  </figcaption>
-</figure>
-중간에 나가서 최종 점수와 순위는 확인하지 못했지만 4등, 1240점 정도로 마무리 지었습니다.  
+<Figure
+  src="/images/codegate-autohack-mini-ctf.png"
+  alt="codegate-autohack-mini-ctf"
+  caption="Write Up 쓰면서 알았는데 서울디지털고등학교 뭐지..?"
+  width="60%"
+/>
+친구가 misc 한문제를 해결하여 총 4문제를 풀었고 중간에 나가서 최종 점수와 순위는 확인하지 못했지만 4등, 1240점 정도로 마무리 지었습니다.  
 팀으로 참가할 수 있어서 동아리 친구들과 재미있게 풀었습니다.

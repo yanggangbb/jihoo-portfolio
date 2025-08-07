@@ -1,0 +1,77 @@
+export const metadata = {
+  title: "선박 기자재 탑재 SW 정보 수집 및 취약점 분석",
+  date: "2025-05-01 ~ 2025-08-12",
+  excerpt: "[WHS 3기 프로젝트] 실제 선박 SW 환경 기반의 분석을 통한 취약점 도출",
+  category: "보안",
+  imageUrl: "/images/opencpn.png",
+  award: "",
+};
+
+## 화이트햇 스쿨 3기 SeaBugs 팀
+**담당멘토**: 이민우 멘토님  
+**PL**: 노용훈 PL님  
+**팀원**: 이태용(PM), 박지후, 유인서, 김주찬, 이규민, 윤현빈, 양승권, 진형권
+
+## 1. 프로젝트 개요
+### 1-1. 프로젝트 배경
+해양 운송 산업의 디지털 전환으로 항해 및 통신 시스템이 소프트웨어 기반 장비로 대체되고 있으며, 
+ECDIS, AIS와 같은 시스템이 대표적이다. 이들 시스템은 실시간 외부 데이터에 의존하지만, 보안이 
+고려되지 않은 설계와 구식 통신 프로토콜로 인해 사이버 공격에 취약하다. 실제로 AIS 스푸핑, GPS 
+위조 등 해양 사이버 위협이 증가하고 있으며, 국제기구도 이를 주요 위협으로 경고하고 있다.
+### 1-2. 프로젝트 목적 및 필요성
+ECDIS, AIS 등 선박용 소프트웨어는 선박 운항의 핵심 기능을 수행하며, 외부와의 지속적 통신으로 
+인해 사이버 위협에 매우 취약하다. 국제해사기구(IMO)는 2021년부터 사이버 보안 관리를 의무화했지만, 
+실제 상용 SW는 폐쇄적 구조, 취약한 통신 프로토콜(NMEA), 보안 패치 지연 등 여러 문제를 안고 있다. 
+이는 AIS 스푸핑, GPS 위조, 해도 조작 등의 보안 사고로 이어질 수 있으며, 결국 물리적 재해로 확산될 
+위험도 있다. 따라서 선제적인 취약점 분석과 위협 평가는 해양 안전과 국제 기준에 부합하는 보안 체계 구축을 위한 중요한 기반이 된다.
+
+## 2. 수행결과
+### 2-1. WBS 달성 결과
+<Figure
+  src="/images/whs-project/milestone.png"
+  alt="milestone"
+  caption="SeaBugs 팀 마일스톤"
+  width="60%"
+/>
+### 2-2. 주요 성과
+1. Virtual sailor NG를 이용한 실험 환경 구성 및 프로토콜 테스트 환경 구성 완료
+  - COM 포트를 통한 Virtual Sailor NG와 OpenCPN 간 연결 구성
+  - Virtual Sailor NG에서 NMEA 신호 전송, OpenCPN에서 수신 및 시각화 확인
+2. **취약점 8개** 도출
+  - S사 O프로그램 관련 취약점 2개는 ZDI(Zero Day Initiative)에 제보 완료
+  - Opensource O프로그램 관련 취약점 6개는 MITRE에 제보 완료
+3. **논문 5편** 투고 완료
+  - 정보보호학회 영남지부 학술대회 1편 투고 및 구두발표 - 2025.06.13
+  - 정보보호학회 하계 학술대회 2편 투고 및 포스터발표 - 2025.06.24
+  - WISA 2025 2편 투고 완료 및 심사 대기중 - 2025.07.24
+4. 국내 유관 기관 다수 방문
+  - 동남 정보보호 클러스터, 부산항 VTS(해상교통관제센터) 방문
+  - 한국해양대학교 융합보안연구실 및 실습선박(한바다호), 전기추진체계 실습실, GMDSS 실습실 방문
+
+## 3. 수행결과 상세소개
+### 3-1. 취약점 분석
+**3-1-1. Opensource O프로그램 - Plugin Import: Path traversal**  
+본 취약점은 Code auditing 과정을 통해, Plugin 모듈 함수에서 발생한다.  
+Metadata 경로 검증 과정 없이 바로 경로 문자열을 받음을 확인 후 테스트해보기 위한 xml 파일을 작성하였다.  
+<Figure
+  src="/images/whs-project/3-1-1-1.png"
+  alt="Plugin Import: Path traversal"
+  caption="[그림 1] 작성한 xml 형식의 PoC"
+  width="40%"
+/>
+이후 이를 트리거하기 위해 명령을 입력하여 Path Traversal을 시도하였다.  
+<Figure
+  src="/images/whs-project/3-1-1-2.png"
+  alt="Plugin Import: Path traversal"
+  caption="[그림 2] PoC 실행 결과"
+  width="60%"
+/>
+취약한 경로 검증을 이용해 어디서든 File Overwrite가 가능함을 확인하였다.
+
+OpenCPN RCE - Command Injection
+- [[ENG] OpenCPN Launcher Plugin - Command Injection via User-defined Command Execution](./opencpn-rce-command-injection)  
+- [[KOR] OpenCPN Launcher Plugin - 사용자 정의 명령 실행을 통한 명령어 주입 취약점](./opencpn-rce-command-injection-kor) 
+- [OpenCPN Launcher Plugin- 사용자 정의 명령 실행을 통한 명령어 주입 취약점 보고서](./opencpn-rce-command-injection-detail) 
+
+
+![opencpn](/images/opencpn.png)

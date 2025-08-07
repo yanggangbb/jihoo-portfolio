@@ -7,14 +7,17 @@ export const metadata = {
   award: "🏆 서울디지텍고등학교 2024 웹앱경진대회 [대상]",
 };
 
-## 📖 프로젝트 개요  
+## 1. 프로젝트 개요  
 ‘DLab’은 실습실 예약과 노트북/태블릿 대여를 간편하게 지원하는 플랫폼으로, 기존의 수기 작성이나 직접 요청 방식의 불편함을 해결하기 위해 개발되었습니다.  
 ![메인페이지](/images/dlab/dlab.png)
 
-## 📝 기술 스택  
-React, Flask, FastAPI, HuggingFace, SQLite
+## 2. 기술 스택  
+**Frontend**: React  
+**Backend**: Flask  
+**AI Server**: FastAPI, HuggingFace  
+**Database**: SQLite  
 
-## 💻 주요 개발 사항  
+## 3. 주요 개발 사항  
 - Figma를 이용한 UI디자인 및 프로토타입 제작  
 - SQLite를 이용한 데이터베이스 구조 설계 및 구축  
 - Flask 라우트 기반의 API 개발  
@@ -22,7 +25,7 @@ React, Flask, FastAPI, HuggingFace, SQLite
 - HuggingFace의 all-MiniLM-L6-v2 모델을 이용한 추천 AI 구현  
 - FastAPI를 사용한 AI 추천 API 개발
 
-## 🧩 시스템 구조
+## 4. 시스템 구조
 이 시스템은 React 프론트엔드, Flask API 서버, AI 서버, 그리고 SQLite 데이터베이스가 연동되어 응답을 반환하는 구조로 구성되어 있습니다.
 ![Dlab 아키텍처](/images/dlab/dlab_architecture.png)
 - Client → React: 사용자가 React 웹페이지에서 활동을 전달합니다.
@@ -31,8 +34,8 @@ React, Flask, FastAPI, HuggingFace, SQLite
 - Flask API Server ↔ AI Server: 사용자의 “활동(Activity)” 정보를 AI 서버에 전달하여, AI 모델이 생성한 “AI 응답”을 받아옵니다.
 - AI Server: 요청받은 활동과 교실 정보의 유사도 분석을 통해 추천 교실과 이유를 생성하여 API 서버에 반환합니다.
 
-## 💡 개발 관련 설명  
-### Backend API
+## 5. 개발 관련 설명  
+### 5-1. Backend API
 Flask 기반의 백엔드로, 실습실 예약·기기 대여 관리 및 카카오 메시지 알림 기능을 제공합니다.
 - **Flask 기반 API 설계**
   - `/submit_lab_application`, `/submit_device_rental`: JSON 데이터를 받아 DB에 저장
@@ -53,7 +56,7 @@ Flask 기반의 백엔드로, 실습실 예약·기기 대여 관리 및 카카�
   - `requests.post()`를 사용해 카카오 API 엔드포인트(`https://kapi.kakao.com/v2/api/talk/memo/default/send`)에 메시지 전송
     ![message](/images/dlab/message.jpg)
 
-### AI 추천 기능
+### 5-2. AI 추천 기능
 SentenceTransformer 라이브러리의 `all-MiniLM-L6-v2`를 사용해 활동 요구사항과 교실 정보 간의 유사도를 계산하고, 프로그램 및 언어 지원 점수를 추가로 반영해 추천 결과를 도출합니다.    
 - **SentenceTransformer (`all-MiniLM-L6-v2`)**
   - 텍스트 간의 의미적 유사도를 계산할 수 있게 해주는 경량 모델인 `all-MiniLM-L6-v2` 사용
@@ -64,7 +67,7 @@ SentenceTransformer 라이브러리의 `all-MiniLM-L6-v2`를 사용해 활동 �
   - 임베딩 유사도 외에도 프로그램 일치도, 언어 일치도를 계산하여 각각의 점수를 정규화 후 가중 합산
     ![ai2](/images/dlab/ai2.jpg)
 
-## 🔗 GitHub
+## 6. GitHub
 - [yanggangbb/DLab](https://github.com/yanggangbb/DLab)
 
 

@@ -16,35 +16,35 @@ export const metadata = {
 ## 2. genesisCrack(rev)
 - 입력값이 인증 키 값과 같다면  Success, 틀리면 경고창을 출력하는 exe 프로그램
 - IDA로 분석, 바로 if문으로 입력값과 인증 키를 비교중(flag = 인증 키 값)
-```
-int __fastcall __noreturn main(int argc, const char **argv, const char **envp)
-{
-  __int64 v3; // rax
-  char v4[32]; // [rsp+20h] [rbp-38h] BYREF
-
-  sub_140001020("  ______ _______ __   _ _______ _______ _____ _______\n");
-  sub_140001020(" |  ____ |______ | \\  | |______ |______   |   |______\n");
-  sub_140001020(" |_____| |______ |  \\_| |______ ______| __|__ ______|\n");
-  sub_140001020("\nWelcome to 2024 CODEGATE OpenCTF\n");
-  sub_140001020("\n");
-  sub_140001020("Enter the 10-digit key: ");
-  sub_140001080("%10s");
-  v3 = 0i64;
-  strcpy(v4, "3502214347");
-  while ( v4[v3 + 16] == v4[v3] )
+  ```
+  int __fastcall __noreturn main(int argc, const char **argv, const char **envp)
   {
-    if ( ++v3 >= 10 )
+    __int64 v3; // rax
+    char v4[32]; // [rsp+20h] [rbp-38h] BYREF
+
+    sub_140001020("  ______ _______ __   _ _______ _______ _____ _______\n");
+    sub_140001020(" |  ____ |______ | \\  | |______ |______   |   |______\n");
+    sub_140001020(" |_____| |______ |  \\_| |______ ______| __|__ ______|\n");
+    sub_140001020("\nWelcome to 2024 CODEGATE OpenCTF\n");
+    sub_140001020("\n");
+    sub_140001020("Enter the 10-digit key: ");
+    sub_140001080("%10s");
+    v3 = 0i64;
+    strcpy(v4, "3502214347");
+    while ( v4[v3 + 16] == v4[v3] )
     {
-      sub_140001020("Auth Success!\n");
-      Sleep(0x7D0u);
-      exit(1);
+      if ( ++v3 >= 10 )
+      {
+        sub_140001020("Auth Success!\n");
+        Sleep(0x7D0u);
+        exit(1);
+      }
     }
+    MessageBoxW(0i64, L"Auth Fail", L"Authentication", 0x10u);
+    Sleep(0xBB8u);
+    exit(1);
   }
-  MessageBoxW(0i64, L"Auth Fail", L"Authentication", 0x10u);
-  Sleep(0xBB8u);
-  exit(1);
-}
-```
+  ```
 - flag: `codegate2024{3502214347}`
 
 ## 3. Gary the Snail(web)
@@ -56,55 +56,55 @@ int __fastcall __noreturn main(int argc, const char **argv, const char **envp)
 
 ## 4. Fool Calculator(misc)
 - time out이 굉장히 빠른 계산 문제
-```
-from pwn import *
-import re
+  ```
+  from pwn import *
+  import re
 
-HOST = '3.34.195.42'
-PORT = 1337
+  HOST = '3.34.195.42'
+  PORT = 1337
 
-def main():
-    p = remote(HOST, PORT)
-    p.recvuntil(b'[+] AI Answer: ')
+  def main():
+      p = remote(HOST, PORT)
+      p.recvuntil(b'[+] AI Answer: ')
+      
+      ai_answer = int(p.recvline().strip())
+      log.info(f'AI Answer: {ai_answer}')
     
-    ai_answer = int(p.recvline().strip())
-    log.info(f'AI Answer: {ai_answer}')
-   
-    def generate_expression(answer):
-        x = answer // 2
-        y = answer - x
-        return f'{x}+{y}'
-   
-    expression = generate_expression(ai_answer)
-    log.info(f'Generated Expression: {expression}')
-   
+      def generate_expression(answer):
+          x = answer // 2
+          y = answer - x
+          return f'{x}+{y}'
+    
+      expression = generate_expression(ai_answer)
+      log.info(f'Generated Expression: {expression}')
+    
 
-    p.sendline(expression)
-    result = p.recvall().decode()
-    log.info(result)
+      p.sendline(expression)
+      result = p.recvall().decode()
+      log.info(result)
 
-if __name__ == "__main__":
-    main()
-```
+  if __name__ == "__main__":
+      main()
+  ```
 - python코드를 작성하여 문제 해결
-```
-C:\Users\admin\Desktop\test.py:32: BytesWarning: Text is not bytes; assuming ASCII, no guarantees. See https://docs.pwntools.com/#bytes
-  p.sendline(expression)
-[x] Receiving all data
-[x] Receiving all data: 33B
-[x] Receiving all data: 70B
-[x] Receiving all data: 195B
-[x] Receiving all data: 227B
+  ```
+  C:\Users\admin\Desktop\test.py:32: BytesWarning: Text is not bytes; assuming ASCII, no guarantees. See https://docs.pwntools.com/#bytes
+    p.sendline(expression)
+  [x] Receiving all data
+  [x] Receiving all data: 33B
+  [x] Receiving all data: 70B
+  [x] Receiving all data: 195B
+  [x] Receiving all data: 227B
 
-[+] Receiving all data: Done (227B)
-[*] Closed connection to 3.34.195.42 port 1337
-[*] --------------------------------
-    [*] Fool equation: 10088630+10088631
-    [*] Fool Answer: 20177261
-    [+] Success, FLAG: codegate2024{e6d973fed0a3cf09af6a040cdf89c0bec7a2e601838b1f80584bdd947e540090}
+  [+] Receiving all data: Done (227B)
+  [*] Closed connection to 3.34.195.42 port 1337
+  [*] --------------------------------
+      [*] Fool equation: 10088630+10088631
+      [*] Fool Answer: 20177261
+      [+] Success, FLAG: codegate2024{e6d973fed0a3cf09af6a040cdf89c0bec7a2e601838b1f80584bdd947e540090}
 
-    Time is up! Closing connection.
-```
+      Time is up! Closing connection.
+  ```
 - flag: `codegate2024{e6d973fed0a3cf09af6a040cdf89c0bec7a2e601838b1f80584bdd947e540090}`
 
 ## 후기
