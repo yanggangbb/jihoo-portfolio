@@ -16,11 +16,11 @@ export default async function Home() {
 
   // 메인페이지에 표시할 문서들
   const projectSlugs = [
-    "iptime-c200-ip-camera-1day-analysis",
     "shipsoft-vuln-analysis",
+    "iptime-c200-ip-camera-1day-analysis",
     "ai-room-bot",
-    "dbase",
     "dlab",
+    "dbase",
   ]
   const blogSlugs = ["data-security-manager-cs", "2025-codegate-autohack-mini-ctf-write-up"]
 
