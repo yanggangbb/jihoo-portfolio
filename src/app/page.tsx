@@ -16,13 +16,13 @@ export default async function Home() {
 
   // 메인페이지에 표시할 문서들
   const projectSlugs = [
-    "2024-codegate-open-ctf-write-up",
-    "open-cpn-0day-analysis",
+    "iptime-c200-ip-camera-1day-analysis",
+    "shipsoft-vuln-analysis",
     "ai-room-bot",
     "dbase",
     "dlab",
   ]
-  const blogSlugs = ["2024-codegate-open-ctf-write-up", "secure-coding-practices"]
+  const blogSlugs = ["data-security-manager-cs", "2025-codegate-autohack-mini-ctf-write-up"]
 
   const securityProjects = allPosts.filter((post) => post.category === "보안" && projectSlugs.includes(post.slug))
   const webAppProjects = allPosts.filter((post) => post.category === "개발" && projectSlugs.includes(post.slug))
