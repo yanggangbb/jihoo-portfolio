@@ -23,7 +23,17 @@ interface PostsPageClientProps {
 }
 
 export default function PostsPageClient({ initialPosts }: PostsPageClientProps) {
-  const visiblePosts = initialPosts.filter((post) => !post.hidden)
+  const parseDateForSort = (dateStr: string) => {
+    if (dateStr.includes("~")) {
+      const parts = dateStr.split("~").map((s) => s.trim())
+      return new Date(parts[1]).getTime()
+    }
+    return new Date(dateStr).getTime()
+  }
+
+  const visiblePosts = initialPosts
+    .filter((post) => !post.hidden)
+    .sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date))
 
   const [posts, setPosts] = useState(visiblePosts)
   const [filteredPosts, setFilteredPosts] = useState(visiblePosts)
@@ -35,23 +45,22 @@ export default function PostsPageClient({ initialPosts }: PostsPageClientProps) 
     window.scrollTo(0, 0)
   }, [])
 
-  // 카테고리 및 검색 필터링
   useEffect(() => {
     let filtered = posts
 
-    // 카테고리 필터링
     if (selectedCategory !== "전체") {
       filtered = filtered.filter((post) => post.category === selectedCategory)
     }
 
-    // 검색 필터링
     if (searchQuery) {
       filtered = filtered.filter(
         (post) =>
           post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()),
+          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
       )
     }
+
+    filtered = filtered.sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date))
 
     setFilteredPosts(filtered)
   }, [selectedCategory, searchQuery, posts])
