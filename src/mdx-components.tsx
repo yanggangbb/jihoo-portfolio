@@ -146,6 +146,46 @@ export function Figure({
   );
 }
 
+// Table component
+export function Table({
+  headers,
+  rows,
+}: {
+  headers: string[];
+  rows: (string | JSX.Element)[][];
+}) {
+  return (
+    <table className="table-auto border-collapse border border-gray-800 w-full text-left my-4">
+      <thead className="bg-gray-900">
+        <tr>
+          {headers.map((header, i) => (
+            <th
+              key={i}
+              className="border border-gray-600 px-4 py-2 font-bold text-gray-100"
+            >
+              {header}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row, i) => (
+          <tr key={i}>
+            {row.map((cell, j) => (
+              <td
+                key={j}
+                className="border border-gray-600 px-4 py-2 text-gray-200"
+              >
+                {cell}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
 // Component map for MDX
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -170,5 +210,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Video,
     YouTube,
     Figure,
+    Table,
   };
 }
