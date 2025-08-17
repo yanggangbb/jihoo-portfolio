@@ -10,7 +10,7 @@ export const metadata = {
 ### [프로젝트 바로보기 >](http://dbase.o-r.kr/)  
 
 ## 1. 프로젝트 개요  
-‘DBase’는  디지텍고 학생과 선생님들을 위한 AI 기반 채용 연계 플랫폼으로, 학생의 이력과 역량을 바탕으로 맞춤형 기업 추천 및 취업 로드맵을 제공합니다. 채용 공고 자동 분석, 지도 기반 취업현황 시각화, 이력 관리 기능 등을 통해 진로 탐색과 취업 지원을 통합적으로 지원합니다.  
+‘DBase’는  디지텍고 학생과 선생님들을 위한 AI 기반 채용 연계 플랫폼으로, 학생의 이력과 역량을 체계적으로 정리하고 AI 기반의 취업 로드맵을 제공합니다. 채용 공고 자동 분석, 지도 기반 취업현황 시각화, 이력 관리 기능 등을 통해 진로 탐색과 취업 지원을 통합적으로 지원합니다.  
 ![메인페이지](/images/dbase/dbase.png)
 
 ## 2. 기술 스택  
@@ -28,46 +28,57 @@ export const metadata = {
 - Flask와 Gemini API를 사용한 AI 로드맵 생성 API 개발
 
 ## 4. 시스템 구조
-이 시스템은 React 프론트엔드, Flask API 서버, AI 서버, 그리고 SQLite 데이터베이스가 연동되어 응답을 반환하는 구조로 구성되어 있습니다.
-![Dlab 아키텍처](/images/dlab/dlab_architecture.png)
-- Client → React: 사용자가 React 웹페이지에서 활동을 전달합니다.
-- React ↔ Flask API Server: React 웹은 사용자의 요청을 Flask 기반 API 서버로 전송하고, 처리된 응답을 다시 받아 화면에 렌더링합니다.
-- Flask API Server ↔ SQLite Database: API 서버는 필요한 데이터를 로드하거나 저장하기 위해 SQLite 데이터베이스와 상호작용합니다.
-- Flask API Server ↔ AI Server: 사용자의 “활동(Activity)” 정보를 AI 서버에 전달하여, AI 모델이 생성한 “AI 응답”을 받아옵니다.
-- AI Server: 요청받은 활동과 교실 정보의 유사도 분석을 통해 추천 교실과 이유를 생성하여 API 서버에 반환합니다.
+이 시스템은 React 프론트엔드, NestJS 백엔드, Flask AI 서버, 그리고 PostgreSQL 데이터베이스가 연동되어 응답을 반환하는 구조로 구성되어 있습니다.
+![DBase 아키텍처](/images/dbase/dbase_architecture.png)
+- Client → React: 사용자는 React 기반 웹 페이지에서 기업 분석 요청 또는 로드맵 생성 요청을 전달합니다.
+- React ↔ NestJS Backend: React 웹은 사용자의 요청을 NestJS 백엔드 서버로 전송하고, 처리된 응답(기업·재직자 정보, 로드맵 등)을 받아 화면에 렌더링합니다.
+- NestJS Backend ↔ PostgreSQL Database: 백엔드는 기업, 채용 공고, 재직자 정보 등 데이터를 PostgreSQL 데이터베이스에서 조회하거나 저장합니다.
+- NestJS Backend ↔ Flask AI Server: 특정 요청(기업 분석, PDF 처리, AI 로드맵 생성 등)은 Flask 기반 AI 서버로 전달됩니다.
+- Flask AI Server ↔ 외부 AI API: Flask 서버는 HuggingFace, Gemini API, ChatGPT API, Serper API를 호출하여 PDF 분석, 기업 분석 리포트, 로드맵 생성 등의 작업을 수행합니다.
+- Flask AI Server → NestJS Backend → React Client: Flask 서버가 생성한 AI 분석 결과는 NestJS 백엔드를 거쳐 React 웹에 전달되고, 사용자는 이를 UI에서 확인할 수 있습니다.
 
 ## 5. 개발 관련 설명  
-### 5-1. Backend API
-Flask 기반의 백엔드로, 실습실 예약·기기 대여 관리 및 카카오 메시지 알림 기능을 제공합니다.
-- **Flask 기반 API 설계**
-  - `/submit_lab_application`, `/submit_device_rental`: JSON 데이터를 받아 DB에 저장
-  - `/api/lab_applications`, `/api/device_rentals`: 조건에 따른 데이터 조회 제공
-  - `/api/update_device_number`, `/api/update_return_date`: 상태 업데이트 API 제공
-  - `@app.route(..., methods=['POST'])` 와 같은 REST 스타일로 기능별 경로와 메서드를 분리
-    ![apply](/images/dlab/apply2.jpg)
-    ![machineApply](/images/dlab/machineApply2.jpg)
-- **SQLite 데이터베이스 연동**
-  - sqlite3 내장 모듈을 사용하여 실습실 신청(`lab_applications`)과 기기 대여(`device_rentals`) 테이블 구축
-  - 데이터 조회 시 `Row factory` 설정으로 딕셔너리 형태 반환 지원
-- **세션 기반 관리자 인증 기능**
-  - Flask의 session 객체를 활용하여 로그인 상태 유지
-  - `/admin_login`, `/admin_device`, `/admin_logout`을 통해 관리 기능 제어
-    ![message](/images/dlab/admin.jpg)
-- **카카오 알림톡 전송**
-  - 교실 예약 또는 대여 신청 시, 선생님들에게 관련 정보를 알림톡으로 전달해 실시간으로 확인할 수 있도록 구현
-  - `requests.post()`를 사용해 카카오 API 엔드포인트(`https://kapi.kakao.com/v2/api/talk/memo/default/send`)에 메시지 전송
-    ![message](/images/dlab/message.jpg)
+### 5-1. 취업 현황 조회 기능
+학생들의 취업 현황을 지도 기반으로 시각화하는 기능입니다.
+- **프론트엔드 (React, Kakao Map API)**
+  - 재직 회사 주소를 지도에 마커로 표시하고, 클릭 시 회사·재직자 정보 조회
+  - 주변 지하철역·편의점·음식점 개수를 300m 반경 내 검색해 아이콘과 함께 표시
+  ![취업 현황](/images/dbase/employmentstatus.png)
+- **백엔드 (NestJS)**
+  - `GET /job/company/employed`: 재직자 있는 회사 목록 제공
+  - `GET /job/company?id={id}`: 특정 회사 및 재직자 정보 반환
 
-### 5-2. AI 추천 기능
-SentenceTransformer 라이브러리의 `all-MiniLM-L6-v2`를 사용해 활동 요구사항과 교실 정보 간의 유사도를 계산하고, 프로그램 및 언어 지원 점수를 추가로 반영해 추천 결과를 도출합니다.    
-- **SentenceTransformer (`all-MiniLM-L6-v2`)**
-  - 텍스트 간의 의미적 유사도를 계산할 수 있게 해주는 경량 모델인 `all-MiniLM-L6-v2` 사용
-  - 활동 요구사항과 교실 스펙을 문장 형태로 임베딩, 의미 기반 유사도 계산 
-  - 활동 설명과 교실 스펙 간의 의미적 유사도를 계산하여 비교
-    ![ai1](/images/dlab/ai.jpg)
-- **정규화 및 가중치 적용**
-  - 임베딩 유사도 외에도 프로그램 일치도, 언어 일치도를 계산하여 각각의 점수를 정규화 후 가중 합산
-    ![ai2](/images/dlab/ai2.jpg)
+### 5-2. AI 채용 공고 자동 분석 기능
+Flask 기반으로 채용 의뢰서 PDF 문서 처리 자동화 및 AI 기업 분석을 제공합니다.
+- **API 요청**
+  - 클라이언트가 분석할 PDF 파일명을 JSON 형식으로 전송
+  - 엔드포인트: POST /api/process-pdf
+- **PDF 텍스트 추출 (PyMuPDF)**
+  - 지정 경로의 PDF 파일을 열고 전체 텍스트 추출
+  - 비정형 데이터를 후속 파싱 단계에서 활용 가능하도록 전처리
+- **정규식 기반 정보 파싱**
+  - 추출된 텍스트에서 회사명, 모집 직무, 자격 요건, 급여 등 20개 이상의 항목을 정규 표현식으로 구조화
+  ![채용의뢰서 자동 분석](/images/dbase/jobinfor.png)
+- **외부 정보 검색 (Google Serper API)**
+  - 회사명을 키워드로 실시간 검색
+  - 최신 뉴스, 공식 홈페이지, 관련 자료 수집
+- **AI 기업 분석 (Hugging Face LLM)**
+  - Llama-3.1-Korean-8B 모델, ChatGPT API 사용
+  - 채용 문서 정보 + 웹 검색 결과를 종합하여 주력 사업, 기술 스택, 성장 가능성 분석
+  ![AI 기업 분석](/images/dbase/jobinfordetail.png)
+- **데이터베이스 저장 (PostgreSQL + SQLAlchemy)**
+  - 기업 정보, 채용 공고, AI 분석 리포트를 구조화하여 DB 저장
+  - UPSERT 로직으로 중복 방지, Company / JobPosting 모델로 체계적 관리
+
+### 5-3. AI 로드맵 생성 기능
+학생이 희망 직무와 학습 기간을 입력하면, AI를 활용해 맞춤형 학습 로드맵을 자동 생성·제공합니다.
+- **Flask + Gemini API**
+  - Google Gemini(`gemini-2.0-flash`) API를 호출해 주차/개월 단위 학습 계획과 프로젝트 단계를 Markdown 형식으로 생성
+  - 결과를 .md 파일로 저장하고 API 응답으로 반환
+- **NestJS 백엔드 연동**
+  - GET /roadmap API로 저장된 로드맵을 조회하여 클라이언트에 전달
+  - Flask는 AI 로드맵 생성, NestJS는 조회 및 서비스 제공 역할 수행
+  ![AI 로드맵](/images/dbase/roadmap.png)
 
 ## 6. 링크
 ### 6-1. GitHub
