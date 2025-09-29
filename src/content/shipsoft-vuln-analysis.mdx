@@ -30,7 +30,7 @@ export const metadata = {
   - 한국해양대학교 융합보안연구실 및 실습선박(한바다호), 전기추진체계 실습실, GMDSS 실습실 방문
 
 ## 2. 취약점 분석
-### 2-1. Opensource O프로그램 - 경로 검증 부재로 인한 Path Traversal  
+### 2-1. Opensource O프로그램 - 경로 검증 부재로 인한 Path Traversal [CVE-2025-56810(가)]   
 코드 검토 과정에서, 특정 플러그인 로드 기능이 외부 입력값으로부터 전달되는
 파일 경로를 별도의 검증 없이 처리하는 동작을 확인하였다. 이 로직은 디렉터리
 이동(../)과 같은 경로 조작 문자를 포함한 입력을 허용하므로, 지정된 작업 디렉
@@ -51,9 +51,9 @@ export const metadata = {
 해당 취약점은 중요 설정 파일 변조, 악성 코드 설치, 로그 조작 등으로 확장될 수 있으며,
 시스템 안정성과 무결성에 심각한 영향을 줄 수 있다  
 - [[ENG] OpenCPN File Overwrite - Path Traversal Vulnerability in import_plugin](./opencpn-path-traversal)  
-- [[KOR] OpenCPN File overwrite - import_plugin에서의 Path traversal 취약점](./opencpn-path-traversal-kor) 
+- [[KOR] OpenCPN File overwrite - import_plugin에서의 Path traversal 취약점](./opencpn-path-traversal-kor)   
 
-### 2-2. Opensource O프로그램 - 플러그인 로드 시 검증 불충분으로 인한 원격 코드 실행 (RCE)
+### 2-2. Opensource O프로그램 - 플러그인 로드 시 검증 불충분으로 인한 원격 코드 실행 [CVE-2025-56812(가)]
 코드 검토 과정에서, 플러그인 로드 기능이 외부 모듈을 불러올 때 화이트리스트 기반의
 신뢰성 검증 없이, 단순 블랙리스트 방식의 제한만 적용하는 동작을 확인하였다. 이로 인
 해 공격자는 정상 구조를 가진 악성 모듈을 제작하여 프로그램에 로드시킬 수 있으며, 이
@@ -86,7 +86,7 @@ PoC에서는 조작된 차트 카탈로그 XML 내부에 시작 프로그램 경
 이 취약점은 물리적 접근 없이도 원격에서 악성 코드를 설치·실행할 수 있어, 시스템 장
 악, 지속적 침투, 추가 공격 수행 등 심각한 위협을 초래할 수 있다.   
 
-### 2-4. Opensource O프로그램 - 입력 길이 검증 미흡으로 인한 Heap Buffer Overflow  
+### 2-4. Opensource O프로그램 - 입력 길이 검증 미흡으로 인한 Heap Buffer Overflow [CVE-2025-56813(가)]  
 <Figure
   src="/images/whs-project/7.png"
   alt="Opensource O: Heap Buffer Overflow"
@@ -107,7 +107,7 @@ AddressSanitizer 빌드 환경에서 대상 프로그램을 실행한 결과, �
 이러한 구조적 결함은 악의적으로 조작된 입력 파일을 통해 힙 영역이 손상될 수 있으며,
 서비스 거부(DoS)뿐 아니라 임의 코드 실행 가능성으로 이어질 수 있는 심각한 보안 취약점이다.  
 
-### 2-5. Opensource O프로그램 - 명령 실행 기능의 입력 검증 미흡으로 인한 Command Injection
+### 2-5. Opensource O프로그램 - 명령 실행 기능의 입력 검증 미흡으로 인한 Command Injection [CVE-2025-56814(가)]  
 <Figure
   src="/images/whs-project/8.png"
   alt="Opensource O: Command Injection"
